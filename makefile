@@ -1,6 +1,6 @@
-CSRC =c/main.c
+CSRC =c/main.c c/fsm/common.c
 CC=gcc
-CFLAGS=-O2 -march=native
+CFLAGS=-O2 -march=native -Wall -Wextra -Wno-unused-result
 CLIB=
 CBIN=bin/c
 

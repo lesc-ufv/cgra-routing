@@ -10,19 +10,21 @@ int main(/*int argc, char const *argv[]*/)
     MaskVector mask;
     InputEdgesVector input;
 
-    FILE * grid = NULL;
-    FILE * edgeList = NULL;
+    FILE * gridFile = NULL;
+    FILE * edgeFile = NULL;
     unsigned int gridSize, inputSize;
 
-    grid = fopen("benchmarks/sbcci/grid/verilog_chebyshev.out", "r");
-    edgeList = fopen("benchmarks/sbcci/edge_list/chebyshev/chebyshev_0.in", "r");
+    gridFile = fopen("benchmarks/sbcci/grid/verilog_chebyshev.out", "r");
+    edgeFile = fopen("benchmarks/sbcci/edge_list/chebyshev/chebyshev_0.in", "r");
 
-    fscanf(edgeList, "%u %u\n\n", &gridSize, &inputSize);
+    fscanf(edgeFile, "%u %u\n\n", &gridSize, &inputSize);
 
     CGRAInitialize(&cgra, 2, gridSize);
-    MaskVectorInitialize(&mask, &cgra, grid);
-    InputEdgesVectorInitialize(&input, &mask, edgeList, inputSize);
+    MaskVectorInitialize(&mask, &cgra, gridFile);
+    InputEdgesVectorInitialize(&input, &mask, &cgra, "benchmarks/sbcci/edge_list/chebyshev/chebyshev_0.in");
     InputEdgesVectorPrint(&input);
+
+    printf("TRIVIAL=%d\n", CGRAEdgeIsTrivial(&cgra, 5, 9));
 
     return 0;
 }

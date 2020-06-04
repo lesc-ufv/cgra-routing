@@ -134,18 +134,45 @@ void MaskVectorPrint(MaskVector * vector)
     printf("\n");
 }
 
-void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, FILE * edgeFile, unsigned int inputQnt)
+void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGRA * cgra, char * edgeFilename)
 {
     unsigned int count = 0;
     unsigned swapSource, swapDestination;
-    input->inputQnt = inputQnt;
-    input->vector = malloc(2*(input->inputQnt+1)*sizeof(unsigned int));
+    input->inputQnt = 0;
+    FILE * edgeFile = fopen(edgeFilename, "r");
+
+    fscanf(edgeFile, "%u %u\n\n", &swapSource, &swapDestination); // Ignoring edge count and grid size
 
     while (fscanf(edgeFile, "%u %u\n", &swapSource, &swapDestination) != EOF)
     {
-        input->vector[count] = MaskVectorConvert(mask, swapSource);
-        input->vector[count+1] = MaskVectorConvert(mask, swapDestination);
-        count = count + 2;
+        swapSource = MaskVectorConvert(mask, swapSource);
+        swapDestination = MaskVectorConvert(mask, swapDestination);
+
+        if (CGRAEdgeIsTrivial(cgra, swapSource, swapDestination))
+        {
+            CGRAEdgeConnectTrivial(cgra, swapSource, swapDestination);
+        }
+        else
+        {
+            input->inputQnt++;
+        }
+    }
+
+    edgeFile = fopen(edgeFilename, "r");
+    input->vector = malloc(2*(input->inputQnt + 1)*sizeof(unsigned int));
+    fscanf(edgeFile, "%u %u\n\n", &swapSource, &swapDestination);  // Ignoring edge count and grid size
+
+    while (fscanf(edgeFile, "%u %u\n", &swapSource, &swapDestination) != EOF)
+    {
+        swapSource = MaskVectorConvert(mask, swapSource);
+        swapDestination = MaskVectorConvert(mask, swapDestination);
+
+        if (!(CGRAEdgeIsTrivial(cgra, swapSource, swapDestination)))
+        {
+            input->vector[count] = swapSource;
+            input->vector[count+1] = swapDestination;
+            count = count + 2;
+        }
     }
 
     input->vector[count] = 0;

@@ -1,26 +1,25 @@
 #include "SimpleWriteOnExec.h"
 
 #define swe_init 0
-#define swe_prefetch 1
-#define swe_nextedge 2
-#define swe_end 3
+#define swe_nextedge 1
+#define swe_end 2
 
-#define swe_x_test 4
-#define swe_xinc_test 5
-#define swe_xinc_set 6
-#define swe_xdec_test 7
-#define swe_xdec_set 8
+#define swe_x_test 3
+#define swe_xinc_test 4
+#define swe_xinc_set 5
+#define swe_xdec_test 6
+#define swe_xdec_set 7
 
-#define swe_y_test 9
-#define swe_yinc_test 10
-#define swe_yinc_set 11
-#define swe_ydec_test 12
-#define swe_ydec_set 13
+#define swe_y_test 8
+#define swe_yinc_test 9
+#define swe_yinc_set 10
+#define swe_ydec_test 11
+#define swe_ydec_set 12
 
-#define swe_xy_test 14
-#define swe_modified_test 15
+#define swe_xy_test 13
+#define swe_modified_test 14
 
-#define swe_blacklist 16
+#define swe_blacklist 15
 
 void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE * out_output)
 {

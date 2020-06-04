@@ -36,7 +36,7 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
     unsigned int * stackNode = malloc(2*(gridlineSize-1)*sizeof(unsigned int));
     unsigned int * stackOutput = malloc(2*(gridlineSize-1)*sizeof(unsigned int));
 
-    printf("GRID--%d\n", grid[32]);
+    DEBUG_PRINT("GRID--%d\n", grid[32]);
 
     InputEdgesVectorCopy(out_input, input);
     CGRAGridCopy(out_grid, grid);
@@ -57,13 +57,19 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
     // Simulating reset pressed
     state = swe_init;
 
+    // DEBUG
+    unsigned int debug_clock = 0;
+    unsigned int debug_bl = 0;
+    unsigned int debug_routed = 0;
+    unsigned int debug_usedOutputs = 0;
+
     while (true)
     {
         switch (state)
         {
 
         case swe_init:
-            printf("swe_init\n");
+            DEBUG_PRINT("swe_init\n");
 
             next_inputIndex = 2;
 
@@ -77,7 +83,7 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             next_prefetch[1] = input[1];
 
             next_state = swe_nextedge;
-            printf("swe_prefetch [%u-%u]\n", next_prefetch[0], next_prefetch[1]);
+            DEBUG_PRINT("swe_prefetch [%u-%u]\n", next_prefetch[0], next_prefetch[1]);
             break;
 
         case swe_nextedge:
@@ -102,11 +108,11 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
 
                 next_state = swe_x_test;
             }
-            printf("swe_nextedge C[%u-%u] P[%u-%u]\n", next_current[0], next_current[1], next_prefetch[0], next_prefetch[1]);
+            DEBUG_PRINT("swe_nextedge C[%u-%u] P[%u-%u]\n", next_current[0], next_current[1], next_prefetch[0], next_prefetch[1]);
             break;
 
         case swe_x_test:
-            printf("swe_x_test dist=%d\n", ((int)(current[1]%gridlineSize - current[0]%gridlineSize)));
+            DEBUG_PRINT("swe_x_test dist=%d\n", ((int)(current[1]%gridlineSize - current[0]%gridlineSize)));
 
             if (((int)(current[1]%gridlineSize - current[0]%gridlineSize)) == 0)
             {
@@ -123,7 +129,7 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             break;
 
         case swe_xdec_test:
-            printf("swe_xdec_test oc-%d byp-%u fe-%d\n", grid[orientation_qnt*current[0] + orientation_right], bypass[current[0]], firstEdge);
+            DEBUG_PRINT("swe_xdec_test oc-%d byp-%u fe-%d\n", grid[orientation_qnt*current[0] + orientation_right], bypass[current[0]], firstEdge);
 
             if(grid[orientation_qnt*current[0] + orientation_right] || (bypass[current[0]] >= max_bypass && !firstEdge))
             {
@@ -152,12 +158,12 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             stackOutput[stackIndex] = orientation_right;
             next_stackIndex = stackIndex + 1;
 
-            printf("swe_xdec_set C[%u-%u]\n", next_current[0], next_current[1]);
+            DEBUG_PRINT("swe_xdec_set C[%u-%u]\n", next_current[0], next_current[1]);
             next_state = swe_x_test;
             break;
 
         case swe_xinc_test:
-            printf("swe_xinc_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_left], bypass[current[0]], firstEdge);
+            DEBUG_PRINT("swe_xinc_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_left], bypass[current[0]], firstEdge);
 
             if(grid[orientation_qnt*current[0] + orientation_left] || (bypass[current[0]] > max_bypass && !firstEdge))
             {
@@ -186,12 +192,12 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             stackOutput[stackIndex] = orientation_left;
             next_stackIndex = stackIndex + 1;
 
-            printf("swe_xinc_set C[%u-%u]\n", next_current[0], next_current[1]);
+            DEBUG_PRINT("swe_xinc_set C[%u-%u]\n", next_current[0], next_current[1]);
             next_state = swe_x_test;
             break;
 
         case swe_y_test:
-            printf("swe_y_test dist=%d\n", ((int)(current[1]/gridlineSize - current[0]/gridlineSize)));
+            DEBUG_PRINT("swe_y_test dist=%d\n", ((int)(current[1]/gridlineSize - current[0]/gridlineSize)));
 
             if (((int)(current[1]/gridlineSize - current[0]/gridlineSize)) == 0)
             {
@@ -208,7 +214,7 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             break;
 
         case swe_ydec_test:
-            printf("swe_ydec_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_left], bypass[current[0]], firstEdge);
+            DEBUG_PRINT("swe_ydec_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_left], bypass[current[0]], firstEdge);
 
             if(grid[orientation_qnt*current[0] + orientation_bot] || (bypass[current[0]] >= max_bypass && !firstEdge))
             {
@@ -237,12 +243,12 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             stackOutput[stackIndex] = orientation_bot;
             next_stackIndex = stackIndex + 1;
 
-            printf("swe_ydec_set C[%u-%u]\n", next_current[0], next_current[1]);
+            DEBUG_PRINT("swe_ydec_set C[%u-%u]\n", next_current[0], next_current[1]);
             next_state = swe_y_test;
             break;
 
         case swe_yinc_test:
-            printf("swe_yinc_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_top], bypass[current[0]], firstEdge);
+            DEBUG_PRINT("swe_yinc_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_top], bypass[current[0]], firstEdge);
 
             if(grid[orientation_qnt*current[0] + orientation_top] || (bypass[current[0]] > max_bypass && !firstEdge))
             {
@@ -271,15 +277,16 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             stackOutput[stackIndex] = orientation_top;
             next_stackIndex = stackIndex + 1;
 
-            printf("swe_yinc_set C[%u-%u]\n", next_current[0], next_current[1]);
+            DEBUG_PRINT("swe_yinc_set C[%u-%u]\n", next_current[0], next_current[1]);
             next_state = swe_y_test;
             break;
 
         case swe_xy_test:
-            printf("swe_xy_test %u==%u\n", current[0], current[1]);
+            DEBUG_PRINT("swe_xy_test %u==%u\n", current[0], current[1]);
 
             if (current[0] == current[1])
             {
+                debug_routed++;
                 next_state = swe_nextedge;
             }
             else
@@ -289,12 +296,12 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             break;
 
         case swe_modified_test:
-            printf("swe_modified_test mod=%d next_mod=%d\n", modified, next_modified);
+            DEBUG_PRINT("swe_modified_test modified=%d\n", modified);
 
             if (modified)
             {
                 next_modified = false;
-                next_state = swe_nextedge;
+                next_state = swe_x_test;
             }
             else
             {
@@ -303,12 +310,13 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             break;
 
         case swe_blacklist:
-            printf("swe_blacklist IE=%u\n", stackIndex);
+            DEBUG_PRINT("swe_blacklist IE=%u\n", stackIndex);
 
             grid[orientation_qnt*stackNode[stackIndex] + stackOutput[stackIndex]] = false;
 
             if(stackIndex==0)
             {
+                debug_bl++;
                 next_state = swe_nextedge;
             }
             else
@@ -321,6 +329,19 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             
             break;
         case swe_end:
+            DEBUG_PRINT("swe_end P[%u-%u]\n", prefetch[0], prefetch[1]);
+
+            for (size_t i = 0; i < 4*out_grid->gridSize; i++)
+            {
+                if(grid[i])
+                {
+                    debug_usedOutputs++;
+                }
+            }
+
+            DEBUG_PRINT("[DEBUG] %u, %u, %u, %f\n", debug_clock, debug_bl, debug_routed, (double)debug_usedOutputs/(out_grid->gridSize*4));
+            fprintf(out_output, "%u, %u, %u, %f", debug_clock, debug_bl, debug_routed, (double)debug_usedOutputs/(out_grid->gridSize*4));
+            
             return;
             break;
         
@@ -338,5 +359,7 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
         modified = next_modified;
         firstEdge = next_firstEdge;
         stackIndex = next_stackIndex;
+
+        debug_clock++;
     }
 }

@@ -57,7 +57,7 @@ typedef struct
     unsigned int inputQnt;
 } InputEdgesVector;
 
-void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGRA * cgra, char * edgeFilename);
+void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGRA * cgra, char * edgeFilename, FILE * outputFile);
 void InputEdgesVectorPrint(InputEdgesVector * vector);
 void InputEdgesVectorFree(InputEdgesVector * vector);
 void InputEdgesVectorCopy(InputEdgesVector * copy, unsigned int * paste);

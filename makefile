@@ -7,5 +7,8 @@ CBIN=bin/c
 all:
 	$(CC) $(CSRC) -o $(CBIN) $(CFLAGS) $(CLIB)
 
+debug:
+	$(CC) $(CSRC) -o $(CBIN) $(CFLAGS) $(CLIB) -DDEBUG
+
 run:
 	./$(CBIN)

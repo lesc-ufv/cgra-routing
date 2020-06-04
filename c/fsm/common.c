@@ -162,8 +162,10 @@ void MaskVectorFree(MaskVector * vector)
     free(vector->vector);
 }
 
-void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGRA * cgra, char * edgeFilename)
+void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGRA * cgra, char * edgeFilename, FILE * outputFile)
 {
+    unsigned int debug_trivials = 0;
+
     unsigned int count = 0;
     unsigned swapSource, swapDestination;
     input->inputQnt = 0;
@@ -179,12 +181,15 @@ void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGR
         if (CGRAEdgeIsTrivial(cgra, swapSource, swapDestination))
         {
             CGRAEdgeConnectTrivial(cgra, swapSource, swapDestination);
+            debug_trivials++;
         }
         else
         {
             input->inputQnt++;
         }
     }
+
+    fprintf(outputFile, "%u, %u, ", debug_trivials, input->inputQnt);
 
     edgeFile = fopen(edgeFilename, "r");
     input->vector = malloc(2*(input->inputQnt + 1)*sizeof(unsigned int));

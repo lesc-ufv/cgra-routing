@@ -4,6 +4,7 @@
 
 #include "fsm/common.h"
 #include "fsm/SimpleWriteOnExec.h"
+#include "fsm/BacktrackWriteOnExec.h"
 
 int main(int argc, char const *argv[])
 {
@@ -15,6 +16,11 @@ int main(int argc, char const *argv[])
     FILE * edgeFile = NULL;
     FILE * outputFile = NULL;
     unsigned int gridSize, inputSize;
+
+    if(argc<=3)
+    {
+        return EXIT_FAILURE;
+    }
 
     gridFile = fopen(argv[1], "r");
     edgeFile = fopen(argv[2], "r");
@@ -43,5 +49,5 @@ int main(int argc, char const *argv[])
     fclose(gridFile);
     fclose(outputFile);
 
-    return 0;
+    return EXIT_SUCCESS;
 }

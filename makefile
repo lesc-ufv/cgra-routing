@@ -1,4 +1,4 @@
-CSRC =c/main.c c/fsm/common.c c/fsm/SimpleWriteOnExec.c
+CSRC =c/main.c c/fsm/common.c c/fsm/SimpleWriteOnExec.c c/fsm/BacktrackWriteOnExec.c
 CC=gcc
 CFLAGS=-O2 -march=native -Wall -Wextra -Wno-unused-result
 CLIB=

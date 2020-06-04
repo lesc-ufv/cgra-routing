@@ -162,7 +162,7 @@ void MaskVectorFree(MaskVector * vector)
     free(vector->vector);
 }
 
-void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGRA * cgra, char * edgeFilename, FILE * outputFile)
+void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGRA * cgra, const char * edgeFilename, FILE * outputFile)
 {
     unsigned int debug_trivials = 0;
 

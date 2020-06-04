@@ -1,27 +1,27 @@
-#include "SimpleWriteOnExec.h"
+#include "BacktrackWriteOnExec.h"
 
-#define swe_init 0
-#define swe_nextedge 1
-#define swe_end 2
+#define bwe_init 0
+#define bwe_nextedge 1
+#define bwe_end 2
 
-#define swe_x_test 3
-#define swe_xinc_test 4
-#define swe_xinc_set 5
-#define swe_xdec_test 6
-#define swe_xdec_set 7
+#define bwe_x_test 3
+#define bwe_xinc_test 4
+#define bwe_xinc_set 5
+#define bwe_xdec_test 6
+#define bwe_xdec_set 7
 
-#define swe_y_test 8
-#define swe_yinc_test 9
-#define swe_yinc_set 10
-#define swe_ydec_test 11
-#define swe_ydec_set 12
+#define bwe_y_test 8
+#define bwe_yinc_test 9
+#define bwe_yinc_set 10
+#define bwe_ydec_test 11
+#define bwe_ydec_set 12
 
-#define swe_xy_test 13
-#define swe_modified_test 14
+#define bwe_xy_test 13
+#define bwe_modified_test 14
 
-#define swe_blacklist 15
+#define bwe_backtrack 15
 
-void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE * out_output)
+void FSM_BacktrackWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE * out_output)
 {
     // Constants
     unsigned int max_bypass = out_grid->maxBypass;
@@ -43,16 +43,18 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
     unsigned int state;
     unsigned int current[2];
     unsigned int inputIndex, stackIndex;
-    bool modified, firstEdge;
+    int backtrackIndex;
+    bool modified, firstEdge, backtracked;
 
     // Next internals
     unsigned int next_state;
     unsigned int next_current[2];
     unsigned int next_inputIndex, next_stackIndex;
-    bool next_modified, next_firstEdge;
+    int next_backtrackIndex;
+    bool next_modified, next_firstEdge, next_backtracked;
 
     // Simulating reset pressed
-    state = swe_init;
+    state = bwe_init;
 
     // DEBUG
     unsigned int debug_clock = 0;
@@ -65,20 +67,20 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
         switch (state)
         {
 
-        case swe_init:
-            DEBUG_PRINT("swe_init\n");
+        case bwe_init:
+            DEBUG_PRINT("bwe_init\n");
 
             next_inputIndex = 0;
 
-            next_state = swe_nextedge;
+            next_state = bwe_nextedge;
             break;
 
-        case swe_nextedge:
+        case bwe_nextedge:
 
 
             if(input[inputIndex + 0]==0 && input[inputIndex + 1]==0)
             {
-                next_state = swe_end;
+                next_state = bwe_end;
             }
             else
             {
@@ -90,42 +92,46 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
                 next_firstEdge = true;
                 next_modified = false;
 
-                next_state = swe_x_test;
+                next_backtracked = false;
+
+                next_state = bwe_x_test;
+    
+                
             }
-            DEBUG_PRINT("swe_nextedge C[%u-%u]\n", next_current[0], next_current[1]);
+            DEBUG_PRINT("bwe_nextedge C[%u-%u]\n", next_current[0], next_current[1]);
             break;
 
-        case swe_x_test:
-            DEBUG_PRINT("swe_x_test dist=%d\n", ((int)(current[1]%gridlineSize - current[0]%gridlineSize)));
+        case bwe_x_test:
+            DEBUG_PRINT("bwe_x_test dist=%d\n", ((int)(current[1]%gridlineSize - current[0]%gridlineSize)));
 
             if (((int)(current[1]%gridlineSize - current[0]%gridlineSize)) == 0)
             {
-                next_state = swe_y_test;
+                next_state = bwe_y_test;
             }
             else if (((int)(current[1]%gridlineSize - current[0]%gridlineSize)) > 0)
             {
-                next_state = swe_xdec_test;
+                next_state = bwe_xdec_test;
             }
             else
             {
-                next_state = swe_xinc_test;
+                next_state = bwe_xinc_test;
             }
             break;
 
-        case swe_xdec_test:
-            DEBUG_PRINT("swe_xdec_test oc-%d byp-%u fe-%d\n", grid[orientation_qnt*current[0] + orientation_right], bypass[current[0]], firstEdge);
+        case bwe_xdec_test:
+            DEBUG_PRINT("bwe_xdec_test oc-%d byp-%u fe-%d\n", grid[orientation_qnt*current[0] + orientation_right], bypass[current[0]], firstEdge);
 
             if(grid[orientation_qnt*current[0] + orientation_right] || (bypass[current[0]] >= max_bypass && !firstEdge))
             {
-                next_state = swe_y_test;
+                next_state = bwe_y_test;
             }
             else
             {
-                next_state = swe_xdec_set;
+                next_state = bwe_xdec_set;
             }
             break;
 
-        case swe_xdec_set:
+        case bwe_xdec_set:
 
             grid[orientation_qnt*current[0] + orientation_right] = true;
 
@@ -142,24 +148,24 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             stackOutput[stackIndex] = orientation_right;
             next_stackIndex = stackIndex + 1;
 
-            DEBUG_PRINT("swe_xdec_set C[%u-%u]\n", next_current[0], next_current[1]);
-            next_state = swe_x_test;
+            DEBUG_PRINT("bwe_xdec_set C[%u-%u]\n", next_current[0], next_current[1]);
+            next_state = bwe_x_test;
             break;
 
-        case swe_xinc_test:
-            DEBUG_PRINT("swe_xinc_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_left], bypass[current[0]], firstEdge);
+        case bwe_xinc_test:
+            DEBUG_PRINT("bwe_xinc_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_left], bypass[current[0]], firstEdge);
 
             if(grid[orientation_qnt*current[0] + orientation_left] || (bypass[current[0]] > max_bypass && !firstEdge))
             {
-                next_state = swe_y_test;
+                next_state = bwe_y_test;
             }
             else
             {
-                next_state = swe_xinc_set;
+                next_state = bwe_xinc_set;
             }
             break;
 
-        case swe_xinc_set:
+        case bwe_xinc_set:
 
             grid[orientation_qnt*current[0] + orientation_left] = true;
 
@@ -176,41 +182,41 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             stackOutput[stackIndex] = orientation_left;
             next_stackIndex = stackIndex + 1;
 
-            DEBUG_PRINT("swe_xinc_set C[%u-%u]\n", next_current[0], next_current[1]);
-            next_state = swe_x_test;
+            DEBUG_PRINT("bwe_xinc_set C[%u-%u]\n", next_current[0], next_current[1]);
+            next_state = bwe_x_test;
             break;
 
-        case swe_y_test:
-            DEBUG_PRINT("swe_y_test dist=%d\n", ((int)(current[1]/gridlineSize - current[0]/gridlineSize)));
+        case bwe_y_test:
+            DEBUG_PRINT("bwe_y_test dist=%d\n", ((int)(current[1]/gridlineSize - current[0]/gridlineSize)));
 
             if (((int)(current[1]/gridlineSize - current[0]/gridlineSize)) == 0)
             {
-                next_state = swe_xy_test;
+                next_state = bwe_xy_test;
             }
             else if (((int)(current[1]/gridlineSize - current[0]/gridlineSize)) > 0)
             {
-                next_state = swe_ydec_test;
+                next_state = bwe_ydec_test;
             }
             else
             {
-                next_state = swe_yinc_test;
+                next_state = bwe_yinc_test;
             }
             break;
 
-        case swe_ydec_test:
-            DEBUG_PRINT("swe_ydec_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_left], bypass[current[0]], firstEdge);
+        case bwe_ydec_test:
+            DEBUG_PRINT("bwe_ydec_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_left], bypass[current[0]], firstEdge);
 
             if(grid[orientation_qnt*current[0] + orientation_bot] || (bypass[current[0]] >= max_bypass && !firstEdge))
             {
-                next_state = swe_xy_test;
+                next_state = bwe_xy_test;
             }
             else
             {
-                next_state = swe_ydec_set;
+                next_state = bwe_ydec_set;
             }
             break;
 
-        case swe_ydec_set:
+        case bwe_ydec_set:
 
             grid[orientation_qnt*current[0] + orientation_bot] = true;
 
@@ -227,24 +233,24 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             stackOutput[stackIndex] = orientation_bot;
             next_stackIndex = stackIndex + 1;
 
-            DEBUG_PRINT("swe_ydec_set C[%u-%u]\n", next_current[0], next_current[1]);
-            next_state = swe_y_test;
+            DEBUG_PRINT("bwe_ydec_set C[%u-%u]\n", next_current[0], next_current[1]);
+            next_state = bwe_y_test;
             break;
 
-        case swe_yinc_test:
-            DEBUG_PRINT("swe_yinc_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_top], bypass[current[0]], firstEdge);
+        case bwe_yinc_test:
+            DEBUG_PRINT("bwe_yinc_test oc-%d byp-%u fe-%d\n", grid[current[0] + orientation_top], bypass[current[0]], firstEdge);
 
             if(grid[orientation_qnt*current[0] + orientation_top] || (bypass[current[0]] > max_bypass && !firstEdge))
             {
-                next_state = swe_xy_test;
+                next_state = bwe_xy_test;
             }
             else
             {
-                next_state = swe_yinc_set;
+                next_state = bwe_yinc_set;
             }
             break;
 
-        case swe_yinc_set:
+        case bwe_yinc_set:
 
             grid[orientation_qnt*current[0] + orientation_top] = true;
 
@@ -261,59 +267,76 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             stackOutput[stackIndex] = orientation_top;
             next_stackIndex = stackIndex + 1;
 
-            DEBUG_PRINT("swe_yinc_set C[%u-%u]\n", next_current[0], next_current[1]);
-            next_state = swe_y_test;
+            DEBUG_PRINT("bwe_yinc_set C[%u-%u]\n", next_current[0], next_current[1]);
+            next_state = bwe_y_test;
             break;
 
-        case swe_xy_test:
-            DEBUG_PRINT("swe_xy_test %u==%u\n", current[0], current[1]);
+        case bwe_xy_test:
+            DEBUG_PRINT("bwe_xy_test %u==%u\n", current[0], current[1]);
 
             if (current[0] == current[1])
             {
                 debug_routed++;
-                next_state = swe_nextedge;
+                next_state = bwe_nextedge;
             }
             else
             {
-                next_state = swe_modified_test;
+                next_state = bwe_modified_test;
             }
             break;
 
-        case swe_modified_test:
-            DEBUG_PRINT("swe_modified_test modified=%d\n", modified);
+        case bwe_modified_test:
+            DEBUG_PRINT("bwe_modified_test modified=%d\n", modified);
 
             if (modified)
             {
                 next_modified = false;
-                next_state = swe_x_test;
+                next_state = bwe_x_test;
             }
             else
             {
-                next_state = swe_blacklist;
+                next_state = bwe_backtrack;
             }
             break;
 
-        case swe_blacklist:
-            DEBUG_PRINT("swe_blacklist IE=%u\n", stackIndex);
+        case bwe_backtrack:
+            DEBUG_PRINT("bwe_backtrack IE=%u\n", stackIndex);
 
             grid[orientation_qnt*stackNode[stackIndex] + stackOutput[stackIndex]] = false;
 
-            if(stackIndex==0)
+            if(!backtracked)
             {
-                debug_bl++;
-                next_state = swe_nextedge;
+                DEBUG_PRINT("FIRST BACKTRACKING - %d\n", backtracked);
+                next_backtrackIndex = stackIndex - 1;
+                next_backtracked = true;
+                next_state = bwe_backtrack;
             }
             else
             {
-                next_stackIndex = stackIndex -1;
-                bypass[stackNode[stackIndex]]--;
+                DEBUG_PRINT("BACKTRACK NUMBER - %d == %d\n", backtrackIndex, backtracked);
+                if(backtrackIndex==-1)
+                {
+                    debug_bl++;
+                    next_state = bwe_nextedge;
+                }
+                else if(stackOutput[backtrackIndex]==orientation_bot || stackOutput[backtrackIndex]==orientation_top)
+                {
+                    next_state = bwe_x_test;
+                }
+                else
+                {
+                    next_state = bwe_y_test;
+                }
 
-                next_state = swe_blacklist;
+                grid[orientation_qnt*stackNode[backtrackIndex]+stackOutput[backtrackIndex]] = false;
+                bypass[stackNode[backtrackIndex]]--;
+                next_backtrackIndex = backtrackIndex - 1;
             }
             
+            
             break;
-        case swe_end:
-            DEBUG_PRINT("swe_end\n");
+        case bwe_end:
+            DEBUG_PRINT("bwe_end\n");
 
             for (size_t i = 0; i < 4*out_grid->gridSize; i++)
             {
@@ -341,6 +364,8 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
         modified = next_modified;
         firstEdge = next_firstEdge;
         stackIndex = next_stackIndex;
+        backtracked = next_backtracked;
+        backtrackIndex = next_backtrackIndex;
 
         debug_clock++;
     }

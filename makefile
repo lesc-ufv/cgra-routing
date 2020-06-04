@@ -12,3 +12,6 @@ debug:
 
 run:
 	./$(CBIN)
+
+test:
+	./$(CBIN) benchmarks/sbcci/grid/verilog_chebyshev.out benchmarks/sbcci/edge_list/chebyshev/chebyshev_0.in output/sbcci/chebyshev_0.csv

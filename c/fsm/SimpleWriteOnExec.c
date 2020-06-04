@@ -44,13 +44,13 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
 
     // Internals
     unsigned int state;
-    unsigned int prefetch[2], current[2];
+    unsigned int current[2];
     unsigned int inputIndex, stackIndex;
     bool modified, firstEdge;
 
     // Next internals
     unsigned int next_state;
-    unsigned int next_prefetch[2], next_current[2];
+    unsigned int next_current[2];
     unsigned int next_inputIndex, next_stackIndex;
     bool next_modified, next_firstEdge;
 
@@ -71,35 +71,22 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
         case swe_init:
             DEBUG_PRINT("swe_init\n");
 
-            next_inputIndex = 2;
-
-
-            next_state = swe_prefetch;
-            break;
-
-        case swe_prefetch:
-
-            next_prefetch[0] = input[0];
-            next_prefetch[1] = input[1];
+            next_inputIndex = 0;
 
             next_state = swe_nextedge;
-            DEBUG_PRINT("swe_prefetch [%u-%u]\n", next_prefetch[0], next_prefetch[1]);
             break;
 
         case swe_nextedge:
 
 
-            if(prefetch[0]==0 && prefetch[1]==0)
+            if(input[inputIndex + 0]==0 && input[inputIndex + 1]==0)
             {
                 next_state = swe_end;
             }
             else
             {
-                next_current[0] = prefetch[0];
-                next_current[1] = prefetch[1];
-
-                next_prefetch[0] = input[inputIndex + 0];
-                next_prefetch[1] = input[inputIndex + 1];
+                next_current[0] = input[inputIndex + 0];
+                next_current[1] = input[inputIndex + 1];
 
                 next_inputIndex = inputIndex + 2;
                 next_stackIndex = 0;
@@ -351,8 +338,6 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
 
         // Always comb
         state = next_state;
-        prefetch[0] = next_prefetch[0];
-        prefetch[1] = next_prefetch[1];
         current[0] = next_current[0];
         current[1] = next_current[1];
         inputIndex = next_inputIndex;

@@ -5,7 +5,7 @@
 #include "fsm/common.h"
 #include "fsm/SimpleWriteOnExec.h"
 
-int main(/*int argc, char const *argv[]*/)
+int main(int argc, char const *argv[])
 {
     CGRA cgra;
     MaskVector mask;
@@ -16,9 +16,9 @@ int main(/*int argc, char const *argv[]*/)
     FILE * outputFile = NULL;
     unsigned int gridSize, inputSize;
 
-    gridFile = fopen("benchmarks/sbcci/grid/verilog_chebyshev.out", "r");
-    edgeFile = fopen("benchmarks/sbcci/edge_list/chebyshev/chebyshev_0.in", "r");
-    outputFile = fopen("output/sbcci/chebyshev_0.csv", "w");
+    gridFile = fopen(argv[1], "r");
+    edgeFile = fopen(argv[2], "r");
+    outputFile = fopen(argv[3], "w");
 
     fscanf(edgeFile, "%u %u\n\n", &gridSize, &inputSize);
 
@@ -30,7 +30,7 @@ int main(/*int argc, char const *argv[]*/)
     {
         CGRAInitialize(&cgra, 2, gridSize);
         MaskVectorInitialize(&mask, &cgra, gridFile);
-        InputEdgesVectorInitialize(&input, &mask, &cgra, "benchmarks/sbcci/edge_list/chebyshev/chebyshev_0.in", outputFile);
+        InputEdgesVectorInitialize(&input, &mask, &cgra, argv[2], outputFile);
 
         FSM_SimpleWriteOnExec(&cgra, &input, outputFile);
 

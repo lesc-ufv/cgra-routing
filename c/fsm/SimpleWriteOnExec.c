@@ -303,6 +303,7 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             break;
 
         case swe_blacklist:
+            printf("swe_blacklist IE=%u\n", stackIndex);
 
             grid[orientation_qnt*stackNode[stackIndex] + stackOutput[stackIndex]] = false;
 

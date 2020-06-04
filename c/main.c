@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "fsm/common.h"
+#include "fsm/SimpleWriteOnExec.h"
 
 int main(/*int argc, char const *argv[]*/)
 {
@@ -19,12 +20,23 @@ int main(/*int argc, char const *argv[]*/)
 
     fscanf(edgeFile, "%u %u\n\n", &gridSize, &inputSize);
 
-    CGRAInitialize(&cgra, 2, gridSize);
-    MaskVectorInitialize(&mask, &cgra, gridFile);
-    InputEdgesVectorInitialize(&input, &mask, &cgra, "benchmarks/sbcci/edge_list/chebyshev/chebyshev_0.in");
-    InputEdgesVectorPrint(&input);
+    fclose(edgeFile);
 
-    printf("TRIVIAL=%d\n", CGRAEdgeIsTrivial(&cgra, 5, 9));
+    while (!feof(gridFile))
+    {
+        CGRAInitialize(&cgra, 2, gridSize);
+        MaskVectorInitialize(&mask, &cgra, gridFile);
+        InputEdgesVectorInitialize(&input, &mask, &cgra, "benchmarks/sbcci/edge_list/chebyshev/chebyshev_0.in");
+
+        FSM_SimpleWriteOnExec(&cgra, &input, 3);
+
+        CGRAFree(&cgra);
+        MaskVectorFree(&mask);
+        InputEdgesVectorFree(&input);
+        break;
+    }
+
+    fclose(gridFile);
 
     return 0;
 }

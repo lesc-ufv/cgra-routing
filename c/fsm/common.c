@@ -97,6 +97,29 @@ void CGRAPrint(CGRA * cgra)
     }
 }
 
+void CGRAGridCopy(CGRA * copy, bool * paste)
+{
+    unsigned int count = 0;
+
+    for (size_t i = 0; i < copy->gridSize; i++)
+    {
+        paste[count] = copy->grid[i].output[0];
+        paste[count+1] = copy->grid[i].output[1];
+        paste[count+2] = copy->grid[i].output[2];
+        paste[count+3] = copy->grid[i].output[3];
+
+        count = count + 4;
+    }
+}
+
+void CGRABypassCopy(CGRA * copy, unsigned int * paste)
+{
+    for (size_t i = 0; i < copy->gridSize; i++)
+    {
+        paste[i] = copy->grid[i].bypass;
+    }
+}
+
 void MaskVectorInitialize(MaskVector * vector, CGRA * cgra, FILE * gridFile)
 {
     unsigned int count = 0;
@@ -132,6 +155,11 @@ void MaskVectorPrint(MaskVector * vector)
         printf("%u ", vector->vector[i]);
     }
     printf("\n");
+}
+
+void MaskVectorFree(MaskVector * vector)
+{
+    free(vector->vector);
 }
 
 void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGRA * cgra, char * edgeFilename)
@@ -177,12 +205,29 @@ void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGR
 
     input->vector[count] = 0;
     input->vector[count+1] = 0;
+    input->inputQnt++;
+
+    fclose(edgeFile);
 }
 
 void InputEdgesVectorPrint(InputEdgesVector * vector)
 {
-    for (size_t i = 0; i < 2*(vector->inputQnt + 1); i = i + 2)
+    for (size_t i = 0; i < 2*(vector->inputQnt); i = i + 2)
     {
         printf("%.2u - %.2u -- Distance = %d\n", vector->vector[i], vector->vector[i+1], (int)vector->vector[i+1]-vector->vector[i]);
+    }
+}
+
+void InputEdgesVectorFree(InputEdgesVector * vector)
+{
+    free(vector->vector);
+}
+
+void InputEdgesVectorCopy(InputEdgesVector * copy, unsigned int * paste)
+{
+    for (size_t i = 0; i < 2*(copy->inputQnt + 1); i = i + 2)
+    {
+        paste[i] = copy->vector[i];
+        paste[i+1] = copy->vector[i+1];
     }
 }

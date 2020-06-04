@@ -37,6 +37,8 @@ void CGRAFree(CGRA * cgra);
 bool CGRAEdgeIsTrivial(CGRA * cgra, unsigned int source, unsigned int destination);
 void CGRAEdgeConnectTrivial(CGRA * cgra, unsigned int source, unsigned int destination);
 void CGRAPrint(CGRA * cgra);
+void CGRAGridCopy(CGRA * copy, bool * paste);
+void CGRABypassCopy(CGRA * copy, unsigned int * paste);
 
 typedef struct
 {
@@ -47,6 +49,7 @@ typedef struct
 void MaskVectorInitialize(MaskVector * vector, CGRA * cgra, FILE * gridFile);
 unsigned int MaskVectorConvert(MaskVector * vector, unsigned int position);
 void MaskVectorPrint(MaskVector * vector);
+void MaskVectorFree(MaskVector * vector);
 
 typedef struct
 {
@@ -56,5 +59,7 @@ typedef struct
 
 void InputEdgesVectorInitialize(InputEdgesVector * input, MaskVector * mask, CGRA * cgra, char * edgeFilename);
 void InputEdgesVectorPrint(InputEdgesVector * vector);
+void InputEdgesVectorFree(InputEdgesVector * vector);
+void InputEdgesVectorCopy(InputEdgesVector * copy, unsigned int * paste);
 
 #endif

@@ -26,10 +26,11 @@ module SimpleWriteOnExec(
     logic [5:0] stack [7:0];
 
     // Internals
+    logic [7:0] current, next_current;
     logic [3:0] state, next_state;
     logic [3:0] index_input, next_index_input;
     logic [2:0] index_stack, next_index_stack;
-    logic modified, next_modified;
+    logic modified, next_modified, fe, next_fe;
 
     always_ff @(posedge clk) begin
 
@@ -42,8 +43,10 @@ module SimpleWriteOnExec(
         else begin
             state <= next_state;
             modified <= next_modified;
+            fe <= next_fe;
             index_input <= next_index_input;
             index_stack <= next_index_stack;
+            current <= next_current;
         end
 
     end
@@ -54,9 +57,20 @@ module SimpleWriteOnExec(
 
             state_init: begin
                 next_index_input <= 0;
-                next_modified <= 0;
-                next_state <= state_init;
-                next_index_stack <= 0;
+                next_state <= state_nextedge;
+            end
+
+            state_nextedge: begin
+                if (cgra[index_input]==0) begin
+                    next_state <= state_end;
+                end
+                else begin
+                    next_current <= edges[index_input];
+                    next_index_input <= index_input + 1;
+                    next_fe <= 1;
+                    next_modified <= 0;
+                    next_state <= state_x_test;
+                end
             end
 
         endcase

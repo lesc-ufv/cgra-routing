@@ -4,7 +4,6 @@
 
 #include "fsm/common.h"
 #include "fsm/SimpleWriteOnExec.h"
-#include "fsm/BacktrackWriteOnExec.h"
 
 int main(int argc, char const *argv[])
 {
@@ -13,9 +12,7 @@ int main(int argc, char const *argv[])
     InputEdgesVector input;
 
     FILE * gridFile = NULL;
-    FILE * edgeFile = NULL;
     FILE * outputFile = NULL;
-    unsigned int gridSize, inputSize;
 
     if(argc<=3)
     {
@@ -23,18 +20,13 @@ int main(int argc, char const *argv[])
     }
 
     gridFile = fopen(argv[1], "r");
-    edgeFile = fopen(argv[2], "r");
     outputFile = fopen(argv[3], "w");
-
-    fscanf(edgeFile, "%u %u\n\n", &gridSize, &inputSize);
-
-    fclose(edgeFile);
 
     fprintf(outputFile, "trivial, nontrivial, cycles, bl, routed, usage\n");
 
     while (!feof(gridFile))
     {
-        CGRAInitialize(&cgra, 2, gridSize);
+        CGRAInitialize(&cgra, 2, argv[1]);
         MaskVectorInitialize(&mask, &cgra, gridFile);
         InputEdgesVectorInitialize(&input, &mask, &cgra, argv[2], outputFile);
 

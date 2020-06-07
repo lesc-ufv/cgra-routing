@@ -32,8 +32,23 @@ void PEPrint(PE * pe)
     printf("%d%d%d%d - %u\n", pe->output[orientation_top], pe->output[orientation_bot], pe->output[orientation_left], pe->output[orientation_right], pe->bypass);
 }
 
-void CGRAInitialize(CGRA * cgra, unsigned int maxBypass, unsigned int gridSize)
+void CGRAInitialize(CGRA * cgra, unsigned int maxBypass, const char * gridFilename)
 {
+    unsigned int gridSize = 0;
+    FILE * gridFile = fopen(gridFilename, "r");
+    char swap;
+
+    fscanf(gridFile, "\n");
+    do
+    {
+        fscanf(gridFile, "%c", &swap);
+        if (swap==' ')
+        {
+            gridSize++;
+        }
+        
+    } while (swap!='\n');
+    
     cgra->grid = malloc(gridSize*sizeof(PE));
     cgra->gridSize = gridSize;
     cgra->maxBypass = maxBypass;

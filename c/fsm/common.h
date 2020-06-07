@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <string.h>
 
 #ifdef DEBUG
 #define DEBUG_PRINT(fmt, args...)    fprintf(stderr, fmt, ## args)
@@ -38,7 +39,7 @@ typedef struct
     unsigned int gridSize;
 } CGRA;
 
-void CGRAInitialize(CGRA * cgra, unsigned int maxBypass, unsigned int gridSize);
+void CGRAInitialize(CGRA * cgra, unsigned int maxBypass, const char * gridFilename);
 void CGRAFree(CGRA * cgra);
 bool CGRAEdgeIsTrivial(CGRA * cgra, unsigned int source, unsigned int destination);
 void CGRAEdgeConnectTrivial(CGRA * cgra, unsigned int source, unsigned int destination);

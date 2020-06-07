@@ -3,6 +3,7 @@ module SimpleWriteOnExec(
     input logic reset
 );
 
+    // States
     parameter state_init = 0;
     parameter state_nextedge = 1;
     parameter state_end = 2;
@@ -19,6 +20,15 @@ module SimpleWriteOnExec(
     parameter state_xy_test = 13;
     parameter state_modified_test = 14;
     parameter state_blacklist = 15;
+
+    // Orientation
+    parameter right = 5;
+    parameter left = 4;
+    parameter top = 3;
+    parameter bot = 2;
+
+    // Constants
+    parameter max_bypass = 2;
 
     // Memories
     logic [5:0] cgra [15:0];
@@ -55,21 +65,62 @@ module SimpleWriteOnExec(
 
         case(state)
 
-            state_init: begin
+            state_init:
+            begin
                 next_index_input <= 0;
+                if(reset)
                 next_state <= state_nextedge;
             end
 
-            state_nextedge: begin
-                if (cgra[index_input]==0) begin
+            state_nextedge:
+            begin
+                if (cgra[index_input]==0)
+                begin
                     next_state <= state_end;
                 end
-                else begin
+                else
+                begin
                     next_current <= edges[index_input];
                     next_index_input <= index_input + 1;
                     next_fe <= 1;
                     next_modified <= 0;
                     next_state <= state_x_test;
+                end
+            end
+
+            state_x_test:
+            begin
+                if ((current[7:4]%4 - current[3:0]%4)==0)
+                begin
+                    next_state = state_y_test;
+                end
+                else if ((current[7:4]%4 - current[3:0]%4)>0)
+                begin
+                    next_state = state_xdec_test;
+                end
+                else
+                begin
+                    next_state = state_xinc_test;
+                end
+            end
+
+            state_xdec_test:
+            begin
+                if (cgra[current][right] || (cgra[current][1:0] == max_bypass && !fe))
+                begin
+                    next_state <= state_y_test;
+                end
+                else
+                begin
+                    next_state <= state_xdec_set;
+                end
+            end
+
+            state_xdec_set:
+            begin
+                cgra[current][right] <= 1;
+                if (!fe) begin
+                    cgra[current][1:0]++;
                 end
             end
 

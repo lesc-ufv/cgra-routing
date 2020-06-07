@@ -1,1 +1,5 @@
 bin/*
+verilog/work
+verilog/transcript
+verilog/vsim.wlf
+verilog/wave.vcd

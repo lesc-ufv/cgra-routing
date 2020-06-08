@@ -22,10 +22,10 @@ module SimpleWriteOnExec(
     parameter state_blacklist = 15;
 
     // Orientation
-    parameter right = 5;
-    parameter left = 4;
-    parameter top = 3;
-    parameter bot = 2;
+    parameter right = 3;
+    parameter left = 2;
+    parameter top = 1;
+    parameter bot = 0;
 
     // Constants
     parameter max_bypass = 2;
@@ -106,7 +106,7 @@ module SimpleWriteOnExec(
 
             state_xdec_test:
             begin
-                if (cgra[current][right] || (cgra[current][1:0] == max_bypass && !fe))
+                if (cgra[current[7:4]][right] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
                 begin
                     next_state <= state_y_test;
                 end
@@ -118,10 +118,21 @@ module SimpleWriteOnExec(
 
             state_xdec_set:
             begin
-                cgra[current][right] <= 1;
+                cgra[current[7:4]][right] <= 1;
+
                 if (!fe) begin
-                    cgra[current][1:0]++;
+                    cgra[current[7:4]][5:4]++;
                 end
+
+                next_current[7:4] <= current[7:4] + 1;
+                next_modified <= 1;
+                next_fe <= 0;
+
+                stack[index_stack][1:0] <= right;
+                state_init[index_stack][7:2] <= current[7:4];
+                next_index_stack <= index_stack + 1;
+
+                next_state = state_x_test;
             end
 
         endcase

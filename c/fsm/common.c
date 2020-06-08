@@ -135,10 +135,12 @@ void CGRABypassCopy(CGRA * copy, unsigned int * paste)
     }
 }
 
-void MaskVectorInitialize(MaskVector * vector, CGRA * cgra, FILE * gridFile)
+void MaskVectorInitialize(MaskVector * vector, CGRA * cgra, FILE * gridFile,  FILE * output)
 {
     unsigned int count = 0;
     unsigned int swap;
+
+    unsigned int debug_empty = 0;
 
     vector->gridSize = cgra->gridSize;
     vector->vector = malloc(vector->gridSize*sizeof(unsigned int));
@@ -153,9 +155,17 @@ void MaskVectorInitialize(MaskVector * vector, CGRA * cgra, FILE * gridFile)
             vector->vector[swap] = count;
             (cgra->grid[count].bypass)++;
         }
+        else
+        {
+            debug_empty++;
+        }
+        
 
         count++;
     }
+
+    fprintf(output, "%u,",cgra->gridSize);
+    fprintf(output, "%u,", debug_empty);
 }
 
 unsigned int MaskVectorConvert(MaskVector * vector, unsigned int position)

@@ -3,3 +3,4 @@ verilog/work
 verilog/transcript
 verilog/vsim.wlf
 verilog/wave.vcd
+out_summary.txt

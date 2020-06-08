@@ -24,7 +24,7 @@ if key_pressed == 1:
     os.system(OUTPUT_FOLDER)
     os.system(CC + " " + CSRC + " -o " + CBIN + " " + CFLAGS + " " + CLIB) # Compiling
 
-
+    edges_count = 0
     for group in sorted(glob.glob("benchmarks/*")):
         output_folder = "output/" + group.split("/")[1] + "/"
         os.system("mkdir " + output_folder)
@@ -38,6 +38,9 @@ if key_pressed == 1:
             for edge_list in sorted(glob.glob(bench + "/*")):
                 output_csv = bench_out_folder + edge_list.split("/")[4].split(".")[0] + ".csv"
                 os.system("./" + CBIN + " " + grid + " " + edge_list + " " + output_csv)
+                if(edges_count==10):
+                    break
+                edges_count += 1
 elif key_pressed == 2:
     os.system(VLIB)
     os.system(VLOG)

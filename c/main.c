@@ -10,6 +10,7 @@ int main(int argc, char const *argv[])
     CGRA cgra;
     MaskVector mask;
     InputEdgesVector input;
+    unsigned int grid_count = 0;
 
     FILE * gridFile = NULL;
     FILE * outputFile = NULL;
@@ -22,12 +23,18 @@ int main(int argc, char const *argv[])
     gridFile = fopen(argv[1], "r");
     outputFile = fopen(argv[3], "w");
 
-    fprintf(outputFile, "trivial, nontrivial, cycles, bl, routed, usage\n");
+    fprintf(outputFile, "size, empty, trivial, nontrivial, cycles, bl, routed, usage\n");
 
     while (!feof(gridFile))
     {
+        if (grid_count==100)
+        {
+            break;
+        }
+        grid_count++;
+
         CGRAInitialize(&cgra, 2, argv[1]);
-        MaskVectorInitialize(&mask, &cgra, gridFile);
+        MaskVectorInitialize(&mask, &cgra, gridFile, outputFile);
         InputEdgesVectorInitialize(&input, &mask, &cgra, argv[2], outputFile);
 
         FSM_SimpleWriteOnExec(&cgra, &input, outputFile);

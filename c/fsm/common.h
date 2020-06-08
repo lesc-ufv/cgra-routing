@@ -53,7 +53,7 @@ typedef struct
     unsigned int gridSize;
 } MaskVector;
 
-void MaskVectorInitialize(MaskVector * vector, CGRA * cgra, FILE * gridFile);
+void MaskVectorInitialize(MaskVector * vector, CGRA * cgra, FILE * gridFile, FILE * output);
 unsigned int MaskVectorConvert(MaskVector * vector, unsigned int position);
 void MaskVectorPrint(MaskVector * vector);
 void MaskVectorFree(MaskVector * vector);

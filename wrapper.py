@@ -50,15 +50,18 @@ elif key_pressed == 3:
     import numpy as np
     import glob
 
-    file = open("out_summary.txt", "w")
-    for group in sorted(glob.glob("output/*")):
-        for bench in sorted(glob.glob(group + "/*")):
-            file.write(bench + "\n")
-            acc=[]
-            for csv in sorted(glob.glob(bench + "/*")):
-                acc.append(pd.read_csv(csv))
-            file.write(str(pd.concat(acc).mean().round(decimals=2)))
-            file.write("\n\n")
-    file.close()
+    names=[]
+    tables=[]
+    for bench in sorted(glob.glob("output/cgrame/*")):
+        names.append(bench)
+        acc=[]
+        for csv in sorted(glob.glob(bench + "/*")):
+            acc.append(pd.read_csv(csv))
+        tables.append((pd.concat(acc).mean().round(decimals=2)))
+
+    for i in range(12):
+        print(str(int(tables[i][0])) + " " + str(tables[i][1]) + " " + str(tables[i][2]) + " " 
+        + str(tables[i][3]) + " " + str(tables[i][6]) + " " + str(tables[i][5]) + " " + str(tables[i][4]) + " " +
+        str(int(round(tables[i][7]*100))) + "%")
 else:
     print("Error")

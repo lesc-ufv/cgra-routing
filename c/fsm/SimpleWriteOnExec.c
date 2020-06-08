@@ -328,8 +328,8 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
                 }
             }
 
-            DEBUG_PRINT("[DEBUG] %u, %u, %u, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs/(out_grid->gridSize*4), (double)(end - begin) / CLOCKS_PER_SEC, (double)debug_clock/swe_verilog_frequency);
-            fprintf(out_output, "%u, %u, %u, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs/(out_grid->gridSize*4), (double)(end - begin) / CLOCKS_PER_SEC, (double)debug_clock/swe_verilog_frequency);
+            DEBUG_PRINT("[DEBUG] %u, %u, %u, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs/(out_grid->gridSize*4), 1000000*(double)(end - begin) / CLOCKS_PER_SEC, 1000000*(double)debug_clock/swe_verilog_frequency);
+            fprintf(out_output, "%u, %u, %u, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs/(out_grid->gridSize*4), 1000000*(double)(end - begin) / CLOCKS_PER_SEC, 1000000*(double)debug_clock/swe_verilog_frequency);
             
             return;
             break;

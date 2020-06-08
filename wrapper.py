@@ -61,9 +61,7 @@ elif key_pressed == 3:
 
     for i in range(12):
         for j in range(len(tables[i])):
-            if j==8 or j==9:
-                print(str(round(tables[i][j], 10)) + " ", end='')
-            elif j==7:
+            if j==7:
                 print(str(round(tables[i][j]*100, 2)) + "% ", end='')
             else:
                 print(str(round(tables[i][j],2)) + " ", end='')

@@ -36,6 +36,10 @@ module SimpleWriteOnExec(
     logic [7:0] edges [10:0];
     logic [5:0] stack [5:0];
 
+    logic [5:0] next_cgra [15:0];
+    logic [7:0] next_edges [10:0];
+    logic [5:0] next_stack [5:0];
+
     // Internals
     logic [7:0] current, next_current;
     logic [3:0] state, next_state;
@@ -58,11 +62,14 @@ module SimpleWriteOnExec(
             index_input <= next_index_input;
             index_stack <= next_index_stack;
             current <= next_current;
+            cgra <= next_cgra;
+            edges <= next_edges;
+            stack <= stack;
         end
 
     end
 
-    always_comb begin
+    always @(*) begin
 
         case(state)
 
@@ -75,7 +82,7 @@ module SimpleWriteOnExec(
 
             state_nextedge:
             begin
-                if (cgra[index_input]==0)
+                if (next_cgra[index_input]==0)
                 begin
                     next_state <= state_end;
                 end
@@ -107,7 +114,7 @@ module SimpleWriteOnExec(
 
             state_xdec_test:
             begin
-                if (cgra[current[7:4]][right] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
+                if (next_cgra[current[7:4]][right] || (next_cgra[current[7:4]][5:4] == max_bypass && !fe))
                 begin
                     next_state <= state_y_test;
                 end
@@ -119,10 +126,10 @@ module SimpleWriteOnExec(
 
             state_xdec_set:
             begin
-                cgra[current[7:4]][right] <= 1;
+                next_cgra[current[7:4]][right] <= 1;
 
                 if (!fe) begin
-                    cgra[current[7:4]][5:4]++;
+                    next_cgra[current[7:4]][5:4]++;
                 end
 
                 next_current[7:4] <= current[7:4] + 1;
@@ -138,7 +145,7 @@ module SimpleWriteOnExec(
 
             state_xinc_test:
             begin
-                if (cgra[current[7:4]][left] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
+                if (next_cgra[current[7:4]][left] || (next_cgra[current[7:4]][5:4] == max_bypass && !fe))
                 begin
                     next_state <= state_y_test;
                 end
@@ -150,10 +157,10 @@ module SimpleWriteOnExec(
 
             state_xinc_set:
             begin
-                cgra[current[7:4]][left] <= 1;
+                next_cgra[current[7:4]][left] <= 1;
 
                 if (!fe) begin
-                    cgra[current[7:4]][5:4]++;
+                    next_cgra[current[7:4]][5:4]++;
                 end
 
                 next_current[7:4] <= current[7:4] - 1;
@@ -185,7 +192,7 @@ module SimpleWriteOnExec(
 
             state_ydec_test:
             begin
-                if (cgra[current[7:4]][bot] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
+                if (next_cgra[current[7:4]][bot] || (next_cgra[current[7:4]][5:4] == max_bypass && !fe))
                 begin
                     next_state <= state_xy_test;
                 end
@@ -197,10 +204,10 @@ module SimpleWriteOnExec(
 
             state_ydec_set:
             begin
-                cgra[current[7:4]][bot] <= 1;
+                next_cgra[current[7:4]][bot] <= 1;
 
                 if (!fe) begin
-                    cgra[current[7:4]][5:4]++;
+                    next_cgra[current[7:4]][5:4]++;
                 end
 
                 next_current[7:4] <= current[7:4] + gridline_size;
@@ -216,7 +223,7 @@ module SimpleWriteOnExec(
 
             state_yinc_test:
             begin
-                if (cgra[current[7:4]][bot] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
+                if (next_cgra[current[7:4]][bot] || (next_cgra[current[7:4]][5:4] == max_bypass && !fe))
                 begin
                     next_state <= state_xy_test;
                 end
@@ -228,10 +235,10 @@ module SimpleWriteOnExec(
 
             state_yinc_set:
             begin
-                cgra[current[7:4]][bot] <= 1;
+                next_cgra[current[7:4]][bot] <= 1;
 
                 if (!fe) begin
-                    cgra[current[7:4]][5:4]++;
+                    next_cgra[current[7:4]][5:4]++;
                 end
 
                 next_current[7:4] <= current[7:4] - gridline_size;
@@ -239,7 +246,7 @@ module SimpleWriteOnExec(
                 next_fe <= 0;
 
                 stack[index_stack][1:0] <= bot;
-                stack[index_stack][7:2] <= current[7:4];
+                stack[index_stack][5:0] <= current[7:4];
                 next_index_stack <= index_stack + 1;
 
                 next_state = state_xy_test;
@@ -271,7 +278,7 @@ module SimpleWriteOnExec(
 
             state_blacklist:
             begin
-                cgra[stack[index_stack][5:2]][stack[index_stack][1:0]] <= 0;
+                next_cgra[stack[index_stack][5:2]][stack[index_stack][1:0]] <= 0;
 
                 if (index_stack == 0)
                 begin
@@ -280,7 +287,7 @@ module SimpleWriteOnExec(
                 else
                 begin
                     next_index_stack <= index_stack - 1;
-                    cgra[stack[index_stack][5:2]][5:4]--;
+                    next_cgra[stack[index_stack][5:2]][5:4]--;
                     next_state <= state_blacklist;
                 end
             end

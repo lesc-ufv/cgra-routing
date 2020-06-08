@@ -16,6 +16,7 @@ import glob
 
 print("1- Compile C and run code")
 print("2- Sinthesize verilog and run simulation")
+print("3- Summarize output")
 key_pressed = int(input("Select: "))
 
 if key_pressed == 1:
@@ -41,5 +42,20 @@ elif key_pressed == 2:
     os.system(VLIB)
     os.system(VLOG)
     os.system(VSIM)
+elif key_pressed == 3:
+    import pandas as pd
+    import numpy as np
+    import glob
+
+    file = open("out_summary.txt", "w")
+    for group in sorted(glob.glob("output/*")):
+        for bench in sorted(glob.glob(group + "/*")):
+            file.write(bench + "\n")
+            acc=[]
+            for csv in sorted(glob.glob(bench + "/*")):
+                acc.append(pd.read_csv(csv))
+            file.write(str(pd.concat(acc).mean().round(decimals=2)))
+            file.write("\n\n")
+    file.close()
 else:
     print("Error")

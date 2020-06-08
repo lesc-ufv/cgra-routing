@@ -1,0 +1,169 @@
+output/cgrame/accumulate
+trivial         12.60
+ nontrivial      9.40
+ cycles        113.64
+ bl              2.64
+ routed          6.53
+ usage           0.23
+dtype: float64
+
+output/cgrame/cap
+trivial         14.45
+ nontrivial     14.55
+ cycles        195.31
+ bl              5.48
+ routed          8.61
+ usage           0.31
+dtype: float64
+
+output/cgrame/conv2
+trivial          9.27
+ nontrivial      8.73
+ cycles        103.56
+ bl              2.66
+ routed          6.07
+ usage           0.30
+dtype: float64
+
+output/cgrame/conv3
+trivial         14.44
+ nontrivial     12.56
+ cycles        161.31
+ bl              4.40
+ routed          7.94
+ usage           0.29
+dtype: float64
+
+output/cgrame/mac
+trivial         6.02
+ nontrivial     6.98
+ cycles        67.79
+ bl             1.17
+ routed         5.47
+ usage          0.20
+dtype: float64
+
+output/cgrame/mac2
+trivial         15.13
+ nontrivial     14.87
+ cycles        179.26
+ bl              4.59
+ routed          9.41
+ usage           0.30
+dtype: float64
+
+output/cgrame/matrixmultiply
+trivial        11.15
+ nontrivial     7.85
+ cycles        85.43
+ bl             1.39
+ routed         6.38
+ usage          0.21
+dtype: float64
+
+output/cgrame/mults1
+trivial         19.10
+ nontrivial     15.90
+ cycles        212.95
+ bl              5.79
+ routed         10.00
+ usage           0.26
+dtype: float64
+
+output/cgrame/simple2
+trivial         8.39
+ nontrivial     5.61
+ cycles        67.69
+ bl             1.16
+ routed         4.45
+ usage          0.25
+dtype: float64
+
+output/cgrame/sum
+trivial         3.82
+ nontrivial     4.18
+ cycles        37.10
+ bl             0.52
+ routed         3.56
+ usage          0.20
+dtype: float64
+
+output/cgrame/twoloops1
+trivial        10.06
+ nontrivial     7.94
+ cycles        87.90
+ bl             2.02
+ routed         5.92
+ usage          0.30
+dtype: float64
+
+output/cgrame/twoloops2
+trivial        14.25
+ nontrivial     6.75
+ cycles        76.00
+ bl             1.66
+ routed         4.95
+ usage          0.22
+dtype: float64
+
+output/sbcci/chebyshev
+trivial          9.99
+ nontrivial      9.01
+ cycles        125.24
+ bl              3.43
+ routed          5.58
+ usage           0.32
+dtype: float64
+
+output/sbcci/mibench
+trivial         17.76
+ nontrivial     14.24
+ cycles        214.19
+ bl              5.74
+ routed          8.50
+ usage           0.25
+dtype: float64
+
+output/sbcci/poly5
+trivial         31.66
+ nontrivial     28.34
+ cycles        464.53
+ bl             14.12
+ routed         14.23
+ usage           0.32
+dtype: float64
+
+output/sbcci/poly6
+trivial          74.25
+ nontrivial      50.75
+ cycles        1011.73
+ usage            0.28
+dtype: float64
+
+output/sbcci/poly8
+trivial         49.47
+ nontrivial     33.53
+ cycles        584.34
+ bl             16.12
+ routed         17.41
+ usage           0.28
+dtype: float64
+
+output/sbcci/qspline
+trivial         44.92
+ nontrivial     40.08
+ cycles        692.06
+ bl             21.20
+ routed         18.88
+ usage           0.26
+dtype: float64
+
+output/sbcci/sgfilter
+trivial         23.21
+ nontrivial     18.79
+ cycles        284.92
+ bl              8.12
+ routed         10.67
+ usage           0.32
+dtype: float64
+

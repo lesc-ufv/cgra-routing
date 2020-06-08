@@ -1,4 +1,5 @@
 bin/*
+output/*
 verilog/work
 verilog/transcript
 verilog/vsim.wlf

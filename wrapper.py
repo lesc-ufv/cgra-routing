@@ -57,11 +57,16 @@ elif key_pressed == 3:
         acc=[]
         for csv in sorted(glob.glob(bench + "/*")):
             acc.append(pd.read_csv(csv))
-        tables.append((pd.concat(acc).mean().round(decimals=2)))
+        tables.append((pd.concat(acc).mean()))
 
     for i in range(12):
-        print(str(int(tables[i][0])) + " " + str(tables[i][1]) + " " + str(tables[i][2]) + " " 
-        + str(tables[i][3]) + " " + str(tables[i][6]) + " " + str(tables[i][5]) + " " + str(tables[i][4]) + " " +
-        str(int(round(tables[i][7]*100))) + "%")
+        for j in range(len(tables[i])):
+            if j==8 or j==9:
+                print(str(round(tables[i][j], 10)) + " ", end='')
+            elif j==7:
+                print(str(round(tables[i][j]*100, 2)) + "% ", end='')
+            else:
+                print(str(round(tables[i][j],2)) + " ", end='')
+        print()
 else:
     print("Error")

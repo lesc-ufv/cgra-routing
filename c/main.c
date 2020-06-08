@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
     gridFile = fopen(argv[1], "r");
     outputFile = fopen(argv[3], "w");
 
-    fprintf(outputFile, "size, empty, trivial, nontrivial, cycles, bl, routed, usage\n");
+    fprintf(outputFile, "size, empty, trivial, nontrivial, routed, bl, cycles, usage, ctime, verilogtime\n");
 
     while (!feof(gridFile))
     {

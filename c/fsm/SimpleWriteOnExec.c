@@ -21,6 +21,8 @@
 
 #define swe_blacklist 15
 
+#define swe_verilog_frequency 200000000 // In hz
+
 void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE * out_output)
 {
     // Constants
@@ -68,6 +70,7 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
 
         case swe_init:
             DEBUG_PRINT("swe_init\n");
+            clock_t begin = clock();
 
             next_inputIndex = 0;
 
@@ -315,6 +318,7 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
             break;
         case swe_end:
             DEBUG_PRINT("swe_end\n");
+            clock_t end = clock();
 
             for (size_t i = 0; i < 4*out_grid->gridSize; i++)
             {
@@ -324,8 +328,8 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
                 }
             }
 
-            DEBUG_PRINT("[DEBUG] %u, %u, %u, %f\n", debug_clock, debug_bl, debug_routed, (double)debug_usedOutputs/(out_grid->gridSize*4));
-            fprintf(out_output, "%u, %u, %u, %f", debug_clock, debug_bl, debug_routed, (double)debug_usedOutputs/(out_grid->gridSize*4));
+            DEBUG_PRINT("[DEBUG] %u, %u, %u, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs/(out_grid->gridSize*4), (double)(end - begin) / CLOCKS_PER_SEC, (double)debug_clock/swe_verilog_frequency);
+            fprintf(out_output, "%u, %u, %u, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs/(out_grid->gridSize*4), (double)(end - begin) / CLOCKS_PER_SEC, (double)debug_clock/swe_verilog_frequency);
             
             return;
             break;

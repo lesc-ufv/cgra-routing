@@ -164,8 +164,7 @@ void MaskVectorInitialize(MaskVector * vector, CGRA * cgra, FILE * gridFile,  FI
         count++;
     }
 
-    fprintf(output, "%u,",cgra->gridSize);
-    fprintf(output, "%u,", debug_empty);
+    fprintf(output, "%u,%u,",cgra->gridSize, debug_empty);
 }
 
 unsigned int MaskVectorConvert(MaskVector * vector, unsigned int position)

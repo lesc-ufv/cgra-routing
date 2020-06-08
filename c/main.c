@@ -11,8 +11,10 @@ int main(int argc, char const *argv[])
     MaskVector mask;
     InputEdgesVector input;
     unsigned int grid_count = 0;
+    unsigned int nodes, edges;
 
     FILE * gridFile = NULL;
+    FILE * edgeFile = NULL;
     FILE * outputFile = NULL;
 
     if(argc<=3)
@@ -21,9 +23,12 @@ int main(int argc, char const *argv[])
     }
 
     gridFile = fopen(argv[1], "r");
+    edgeFile = fopen(argv[2], "r");
     outputFile = fopen(argv[3], "w");
 
-    fprintf(outputFile, "size, empty, trivial, nontrivial, routed, bl, cycles, usage, ctime, verilogtime\n");
+    fscanf(edgeFile, "%u %u", &nodes, &edges);
+
+    fprintf(outputFile, "nodes, edges, size, empty, trivial, nontrivial, routed, bl, cycles, usage, cpu_time, verilog_time\n");
 
     while (!feof(gridFile))
     {
@@ -32,6 +37,8 @@ int main(int argc, char const *argv[])
             break;
         }
         grid_count++;
+
+        fprintf(outputFile, "%u,%u,", nodes, edges);
 
         CGRAInitialize(&cgra, 2, argv[1]);
         MaskVectorInitialize(&mask, &cgra, gridFile, outputFile);
@@ -46,6 +53,7 @@ int main(int argc, char const *argv[])
     }
 
     fclose(gridFile);
+    fclose(edgeFile);
     fclose(outputFile);
 
     return EXIT_SUCCESS;

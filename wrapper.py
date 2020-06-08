@@ -59,9 +59,13 @@ elif key_pressed == 3:
             acc.append(pd.read_csv(csv))
         tables.append((pd.concat(acc).mean()))
 
+    print("nodes edges size empty trivial nontrivial routed bl cycles usage cpu_time verilog_time")
+
     for i in range(12):
         for j in range(len(tables[i])):
-            if j==7:
+            if j==0 or j==1 or j==2:
+                print(str(int(round(tables[i][j], 0))) + " ", end='')
+            elif j==7:
                 print(str(round(tables[i][j]*100, 2)) + "% ", end='')
             else:
                 print(str(round(tables[i][j],2)) + " ", end='')

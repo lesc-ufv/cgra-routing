@@ -5,8 +5,8 @@ module Testbench();
     initial begin
         $dumpfile("wave.vcd");
         $dumpvars(0, Testbench);
-        reset<=1; #3;
-        reset<=0; #1;
+        reset<=1; #1;
+        reset<=0;
     end
 
     always begin

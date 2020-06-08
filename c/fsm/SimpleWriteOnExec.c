@@ -51,14 +51,15 @@ void FSM_SimpleWriteOnExec(CGRA * out_grid, InputEdgesVector * out_input, FILE *
     unsigned int next_inputIndex, next_stackIndex;
     bool next_modified, next_firstEdge;
 
-    // Simulating reset pressed
-    state = swe_init;
-
     // DEBUG
     unsigned int debug_clock = 0;
     unsigned int debug_bl = 0;
     unsigned int debug_routed = 0;
     unsigned int debug_usedOutputs = 0;
+
+    // Simulating reset pressed
+    state = swe_init;
+    debug_clock++; // Cycle for reset
 
     while (true)
     {

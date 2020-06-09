@@ -3,80 +3,29 @@ LegUp High-Level Synthesis Tool Version 7.5 (http://legupcomputing.com)
 Copyright (c) 2015-2019 LegUp Computing Inc. All Rights Reserved.
 For technical issues, please contact: support@legupcomputing.com
 For general inquiries, please contact: info@legupcomputing.com
-Date: Mon Jun  8 21:35:32 2020
+Date: Mon Jun  8 22:13:01 2020
 ----------------------------------------------------------------------------
 Info: You are using the trial version of LegUp (trial days remaining: 18).
       The trial version can only be used for non-commercial evaluation purposes.
       Run LegUp LicenseActivation to activate the full version of LegUp with a valid product key.
 Info: LegUp is starting.
-FSM_SimpleWriteOnExec_labeled.c:30:28: error: implicit declaration of function 'malloc' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-    unsigned int * input = malloc(2*10*sizeof(unsigned int));
-                           ^
-FSM_SimpleWriteOnExec_labeled.c:30:20: warning: incompatible integer to pointer conversion initializing 'unsigned int *' with an expression of type 'int' [-Wint-conversion]
-    unsigned int * input = malloc(2*10*sizeof(unsigned int));
-                   ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-FSM_SimpleWriteOnExec_labeled.c:31:5: error: use of undeclared identifier 'bool'
-    bool * grid = malloc(4*16*sizeof(bool));
-    ^
-FSM_SimpleWriteOnExec_labeled.c:31:12: error: use of undeclared identifier 'grid'
-    bool * grid = malloc(4*16*sizeof(bool));
-           ^
-FSM_SimpleWriteOnExec_labeled.c:31:38: error: use of undeclared identifier 'bool'
-    bool * grid = malloc(4*16*sizeof(bool));
-                                     ^
-FSM_SimpleWriteOnExec_labeled.c:32:20: warning: incompatible integer to pointer conversion initializing 'unsigned int *' with an expression of type 'int' [-Wint-conversion]
-    unsigned int * bypass = malloc(16*sizeof(unsigned int));
-                   ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-FSM_SimpleWriteOnExec_labeled.c:33:20: warning: incompatible integer to pointer conversion initializing 'unsigned int *' with an expression of type 'int' [-Wint-conversion]
-    unsigned int * stackNode = malloc(2*(4-1)*sizeof(unsigned int));
-                   ^           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-FSM_SimpleWriteOnExec_labeled.c:34:20: warning: incompatible integer to pointer conversion initializing 'unsigned int *' with an expression of type 'int' [-Wint-conversion]
-    unsigned int * stackOutput = malloc(2*(4-1)*sizeof(unsigned int));
-                   ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-FSM_SimpleWriteOnExec_labeled.c:40:5: error: use of undeclared identifier 'bool'
-    bool modified, firstEdge;
-    ^
-FSM_SimpleWriteOnExec_labeled.c:46:5: error: use of undeclared identifier 'bool'
-    bool next_modified, next_firstEdge;
-    ^
-FSM_SimpleWriteOnExec_labeled.c:51:12: error: use of undeclared identifier 'true'
-    while (true)
-           ^
-FSM_SimpleWriteOnExec_labeled.c:76:17: error: use of undeclared identifier 'next_firstEdge'
-                next_firstEdge = true;
-                ^
-FSM_SimpleWriteOnExec_labeled.c:76:34: error: use of undeclared identifier 'true'
-                next_firstEdge = true;
-                                 ^
-FSM_SimpleWriteOnExec_labeled.c:77:17: error: use of undeclared identifier 'next_modified'
-                next_modified = false;
-                ^
-FSM_SimpleWriteOnExec_labeled.c:77:33: error: use of undeclared identifier 'false'
-                next_modified = false;
-                                ^
-FSM_SimpleWriteOnExec_labeled.c:101:16: error: use of undeclared identifier 'grid'
-            if(grid[orientation_qnt*current[0] + orientation_right] || (bypass[current[0]] >= max_bypass && !firstEdge))
-               ^
-FSM_SimpleWriteOnExec_labeled.c:101:21: error: use of undeclared identifier 'orientation_qnt'
-            if(grid[orientation_qnt*current[0] + orientation_right] || (bypass[current[0]] >= max_bypass && !firstEdge))
-                    ^
-FSM_SimpleWriteOnExec_labeled.c:101:50: error: use of undeclared identifier 'orientation_right'
-            if(grid[orientation_qnt*current[0] + orientation_right] || (bypass[current[0]] >= max_bypass && !firstEdge))
-                                                 ^
-FSM_SimpleWriteOnExec_labeled.c:101:110: error: use of undeclared identifier 'firstEdge'
-            if(grid[orientation_qnt*current[0] + orientation_right] || (bypass[current[0]] >= max_bypass && !firstEdge))
-                                                                                                             ^
-FSM_SimpleWriteOnExec_labeled.c:113:13: error: use of undeclared identifier 'grid'
-            grid[orientation_qnt*current[0] + orientation_right] = true;
-            ^
-FSM_SimpleWriteOnExec_labeled.c:113:18: error: use of undeclared identifier 'orientation_qnt'
-            grid[orientation_qnt*current[0] + orientation_right] = true;
-                 ^
-FSM_SimpleWriteOnExec_labeled.c:113:47: error: use of undeclared identifier 'orientation_right'
-            grid[orientation_qnt*current[0] + orientation_right] = true;
-                                              ^
-FSM_SimpleWriteOnExec_labeled.c:113:68: error: use of undeclared identifier 'true'
-            grid[orientation_qnt*current[0] + orientation_right] = true;
-                                                                   ^
-fatal error: too many errors emitted, stopping now [-ferror-limit=]
-4 warnings and 20 errors generated.
+Info: Running Allocation.
+Info: Target FPGA: INTEL Arria10.
+Info: Clock period constraint: 5.00 ns (200.00 MHz).
+Info: Allocating memories.
+Info: Running Scheduling for function: main.
+Info: Done Scheduling.
+Info: Generating RTL for function: main.
+Info: Generating module declaration.
+Info: Generating module signals.
+Info: Running Binding for function: main.
+Info: Generating module datapath.
+Info: Generating interconnect for top-level module.
+Info: Printing VHDL wrapper to file: legup.vhd
+Info: Printing legup type VHDL packages to file: legup_types_pkg.vhd
+Info: Outputting VHDL wrapper for top-level module: top.
+Info: Printing RTL to file.
+Info: Outputting top-level module: top.
+Info: Outputting module: main.
+Info: Verilog output file: legup.v.
+Info: LegUp summary report: ./reports/summary.legup.rpt.

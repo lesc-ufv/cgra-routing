@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <stdbool.h>
+
 #define swe_init 0
 #define swe_nextedge 1
 #define swe_end 2
@@ -19,18 +24,26 @@
 
 #define swe_blacklist 15
 
-void main()
+#define orientation_qnt 4
+#define empty_pe 255
+
+#define orientation_top 0
+#define orientation_bot 1
+#define orientation_left 2
+#define orientation_right 3
+
+int core()
 {
     // Constants
     unsigned int max_bypass = 2;
     unsigned int gridlineSize = 4;
 
     // Memories
-    unsigned int * input = malloc(2*10*sizeof(unsigned int));
-    bool * grid = malloc(4*16*sizeof(bool));
-    unsigned int * bypass = malloc(16*sizeof(unsigned int));
-    unsigned int * stackNode = malloc(2*(4-1)*sizeof(unsigned int));
-    unsigned int * stackOutput = malloc(2*(4-1)*sizeof(unsigned int));
+    unsigned int input [2*10];
+    bool grid [4*16];
+    unsigned int bypass [16];
+    unsigned int stackNode [2*(4-1)];
+    unsigned int stackOutput [2*(4-1)];
 
     // Internals
     unsigned int state;
@@ -283,7 +296,7 @@ void main()
             break;
         case swe_end:
             next_state = swe_end;
-            return;
+            return 1;
             break;
         
         default:
@@ -299,4 +312,9 @@ void main()
         firstEdge = next_firstEdge;
         stackIndex = next_stackIndex;
     }
+    return 0;
+}
+
+int main(){
+	return core();
 }

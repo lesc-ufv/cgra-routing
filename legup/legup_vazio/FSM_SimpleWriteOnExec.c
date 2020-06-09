@@ -32,18 +32,18 @@
 #define orientation_left 2
 #define orientation_right 3
 
-void main()
+int core()
 {
     // Constants
     unsigned int max_bypass = 2;
     unsigned int gridlineSize = 4;
 
     // Memories
-    unsigned int input[22] = {10, 10, 21, 17, 17, 17, 20, 23, 20, 5, 0, 6, 6, 2, 6, 17, 7, 15, 7, 21, 0, 0};
-    bool grid[100] = {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0};
-    unsigned int bypass[25] = {1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0};
-    unsigned int stackNode[8];
-    unsigned int stackOutput[8];
+    unsigned int input [2*10];
+    bool grid [4*16];
+    unsigned int bypass [16];
+    unsigned int stackNode [2*(4-1)];
+    unsigned int stackOutput [2*(4-1)];
 
     // Internals
     unsigned int state;
@@ -296,7 +296,7 @@ void main()
             break;
         case swe_end:
             next_state = swe_end;
-            return;
+            return 1;
             break;
         
         default:
@@ -312,4 +312,9 @@ void main()
         firstEdge = next_firstEdge;
         stackIndex = next_stackIndex;
     }
+    return 0;
+}
+
+int main(){
+	return core();
 }

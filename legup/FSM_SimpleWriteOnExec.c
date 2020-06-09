@@ -19,7 +19,7 @@
 
 #define swe_blacklist 15
 
-void FSM_SimpleWriteOnExec()
+void main()
 {
     // Constants
     unsigned int max_bypass = 2;

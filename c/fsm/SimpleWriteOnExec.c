@@ -22,6 +22,8 @@
 #define swe_blacklist 15
 
 #define swe_verilog_frequency 200000000 // In hz
+#define swe_legup_frequency 100000000 // In hz
+#define swe_vivado_frequency 100000000 // In hz
 
 void FSM_SimpleWriteOnExec(CGRA *out_grid, InputEdgesVector *out_input, FILE *out_output)
 {
@@ -326,8 +328,8 @@ void FSM_SimpleWriteOnExec(CGRA *out_grid, InputEdgesVector *out_input, FILE *ou
                 }
             }
 
-            DEBUG_PRINT("[DEBUG] %u, %u, %u, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs / (out_grid->gridSize * 4), 1000000 * (double)(end - begin) / CLOCKS_PER_SEC, 1000000 * (double)debug_clock / swe_verilog_frequency);
-            fprintf(out_output, "%u, %u, %u, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs / (out_grid->gridSize * 4), 1000000 * (double)(end - begin) / CLOCKS_PER_SEC, 1000000 * (double)debug_clock / swe_verilog_frequency);
+            DEBUG_PRINT("[DEBUG] %u, %u, %u, %f, %f, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs / (out_grid->gridSize * 4), 1000000 * (double)(end - begin) / CLOCKS_PER_SEC, 1000000 * (double)debug_clock / swe_verilog_frequency, 1000000 * (double)debug_clock / swe_legup_frequency, 1000000 * (double)debug_clock / swe_vivado_frequency);
+            fprintf(out_output, "%u, %u, %u, %f, %f, %f, %f, %f", debug_bl, debug_routed, debug_clock, (double)debug_usedOutputs / (out_grid->gridSize * 4), 1000000 * (double)(end - begin) / CLOCKS_PER_SEC, 1000000 * (double)debug_clock / swe_verilog_frequency, 1000000 * (double)debug_clock / swe_legup_frequency, 1000000 * (double)debug_clock / swe_vivado_frequency);
 
             return;
             break;

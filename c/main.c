@@ -30,7 +30,7 @@ int main(int argc, char const *argv[])
 
     fscanf(edgeFile, "%u %u", &nodes, &edges);
 
-    fprintf(outputFile, "nodes, edges, size, empty, trivial, nontrivial, routed, bl, cycles, usage, cpu_time, verilog_time\n");
+    fprintf(outputFile, "nodes, edges, size, empty, trivial, nontrivial, routed, bl, cycles, usage, cpu_time, hand_verilog_time, legup_verilog_time, vivado_verilog_time\n");
 
     while (!feof(gridFile))
     {

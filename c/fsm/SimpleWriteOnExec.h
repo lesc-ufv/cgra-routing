@@ -4,6 +4,6 @@
 #include "common.h"
 #include "time.h"
 
-void FSM_SimpleWriteOnExec(CGRA * grid, InputEdgesVector * input, FILE * output);
+void FSM_SimpleWriteOnExec(CGRA *grid, InputEdgesVector *input, FILE *output);
 
 #endif

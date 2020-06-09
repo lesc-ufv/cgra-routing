@@ -5,6 +5,8 @@
 #include "fsm/common.h"
 #include "fsm/SimpleWriteOnExec.h"
 
+#define max_grids_per_test 10
+
 int main(int argc, char const *argv[])
 {
     CGRA cgra;
@@ -13,11 +15,11 @@ int main(int argc, char const *argv[])
     unsigned int grid_count = 0;
     unsigned int nodes, edges;
 
-    FILE * gridFile = NULL;
-    FILE * edgeFile = NULL;
-    FILE * outputFile = NULL;
+    FILE *gridFile = NULL;
+    FILE *edgeFile = NULL;
+    FILE *outputFile = NULL;
 
-    if(argc<=3)
+    if (argc <= 3)
     {
         return EXIT_FAILURE;
     }
@@ -32,7 +34,7 @@ int main(int argc, char const *argv[])
 
     while (!feof(gridFile))
     {
-        if (grid_count==100)
+        if (grid_count == max_grids_per_test)
         {
             break;
         }

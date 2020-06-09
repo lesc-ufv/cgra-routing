@@ -11,6 +11,8 @@ VLIB = "cd verilog && vlib.exe work"
 VLOG = "cd verilog && vlog.exe Testbench.sv SimpleWriteOnExec.sv"
 VSIM = "cd verilog && vsim.exe Testbench"
 
+INPUT_EDGES_PER_TEST = 100
+
 import os
 import glob
 
@@ -38,7 +40,7 @@ if key_pressed == 1:
             for edge_list in sorted(glob.glob(bench + "/*")):
                 output_csv = bench_out_folder + edge_list.split("/")[4].split(".")[0] + ".csv"
                 os.system("./" + CBIN + " " + grid + " " + edge_list + " " + output_csv)
-                if(edges_count==10):
+                if(edges_count==INPUT_EDGES_PER_TEST):
                     break
                 edges_count += 1
 elif key_pressed == 2:

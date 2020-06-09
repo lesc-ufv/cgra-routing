@@ -67,7 +67,7 @@ module SimpleWriteOnExec(
 
     end
 
-    always_comb begin
+    always @(*) begin
         case(state)
 
             state_init:
@@ -128,7 +128,7 @@ module SimpleWriteOnExec(
                 next_cgra[current[7:4]][right] <= 1;
 
                 if (!fe) begin
-                    next_cgra[current[7:4]][5:4] = cgra[current[7:4]][5:4] + 1;
+                    next_cgra[current[7:4]][5:4] <= cgra[current[7:4]][5:4] + 1;
                 end
 
                 next_current[7:4] <= current[7:4] + 1;
@@ -159,7 +159,7 @@ module SimpleWriteOnExec(
                 next_cgra[current[7:4]][left] <= 1;
 
                 if (!fe) begin
-                    next_cgra[current[7:4]][5:4] = cgra[current[7:4]][5:4] + 1;
+                    next_cgra[current[7:4]][5:4] <= cgra[current[7:4]][5:4] + 1;
                 end
 
                 next_current[7:4] <= current[7:4] - 1;
@@ -206,7 +206,7 @@ module SimpleWriteOnExec(
                 next_cgra[current[7:4]][bot] <= 1;
 
                 if (!fe) begin
-                    next_cgra[current[7:4]][5:4] = cgra[current[7:4]][5:4] + 1;
+                    next_cgra[current[7:4]][5:4] <= cgra[current[7:4]][5:4] + 1;
                 end
 
                 next_current[7:4] <= current[7:4] + gridline_size;

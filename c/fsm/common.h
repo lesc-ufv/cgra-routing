@@ -69,4 +69,6 @@ void InputEdgesVectorPrint(InputEdgesVector *vector);
 void InputEdgesVectorFree(InputEdgesVector *vector);
 void InputEdgesVectorCopy(InputEdgesVector *copy, unsigned int *paste);
 
+void CreateLegupInput(CGRA *cgra, InputEdgesVector *input);
+
 #endif

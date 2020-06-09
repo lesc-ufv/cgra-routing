@@ -262,16 +262,16 @@ void InputEdgesVectorCopy(InputEdgesVector *copy, unsigned int *paste)
 
 void CreateLegupInput(CGRA *cgra, InputEdgesVector *input)
 {
-    printf("unsigned int input[%u] = {", (*input).inputQnt);
-    for (size_t i = 0; i < (*input).inputQnt; i++)
+    printf("unsigned int input[%u] = {", 2*(*input).inputQnt);
+    for (size_t i = 0; i < 2*(*input).inputQnt; i++)
     {
-        if (i != ((*input).inputQnt - 1))
+        if (i != 2*((*input).inputQnt) - 1)
         {
             printf("%u, ", (*input).vector[i]);
         }
         else
         {
-            printf("%u}\n", (*input).vector[i]);
+            printf("%u};\n", (*input).vector[i]);
         }
     }
 
@@ -286,7 +286,7 @@ void CreateLegupInput(CGRA *cgra, InputEdgesVector *input)
             }
             else
             {
-                printf("%u}\n", (*cgra).grid[i].output[j]);
+                printf("%u};\n", (*cgra).grid[i].output[j]);
             }
         }
     }
@@ -300,7 +300,7 @@ void CreateLegupInput(CGRA *cgra, InputEdgesVector *input)
         }
         else
         {
-            printf("%u}\n", (*cgra).grid[i].bypass);
+            printf("%u};\n", (*cgra).grid[i].bypass);
         }
     }
 

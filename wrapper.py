@@ -39,6 +39,7 @@ if key_pressed == 1:
 
             for edge_list in sorted(glob.glob(bench + "/*")):
                 output_csv = bench_out_folder + edge_list.split("/")[4].split(".")[0] + ".csv"
+                print("\n" + bench)
                 os.system("./" + CBIN + " " + grid + " " + edge_list + " " + output_csv)
                 if(edges_count==INPUT_EDGES_PER_TEST):
                     break
@@ -68,7 +69,7 @@ elif key_pressed == 3:
         for j in range(len(tables[i])):
             if j==0 or j==1 or j==2:
                 print(str(int(round(tables[i][j], 0))), end=" ")
-            elif j==7:
+            elif j==9:
                 print(str(round(tables[i][j]*100, 2)), end="% ")
             else:
                 print(str(round(tables[i][j],2)), end=" ")

@@ -48,6 +48,8 @@ int main(int argc, char const *argv[])
 
         FSM_SimpleWriteOnExec(&cgra, &input, outputFile);
 
+        //CreateLegupInput(&cgra, &input);
+
         CGRAFree(&cgra);
         MaskVectorFree(&mask);
         InputEdgesVectorFree(&input);

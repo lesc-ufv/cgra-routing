@@ -1,5 +1,0 @@
-digraph {
-Node0x20accb0[label="main_inst", shape="box"];
-Node0x20e76f0[label="top_inst_inst", shape="box"];
-Node0x20e76f0 -> Node0x20accb0;
-}

@@ -1,0 +1,5 @@
+digraph {
+Node0x1fb4650[label="main_inst", shape="box"];
+Node0x1fb6530[label="main_top_inst_inst", shape="box"];
+Node0x1fb6530 -> Node0x1fb4650;
+}

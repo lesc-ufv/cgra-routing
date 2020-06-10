@@ -1,0 +1,26 @@
+# This makefile is used for the C/RTL co-simulation flow in the simulation/sw directory
+ifeq (,$(wildcard Makefile))
+include makefile
+else
+include Makefile
+endif
+
+ifneq (,$(wildcard /etc/redhat-release))	
+	GCC_DIR=$(LEGUP_ROOT_DIR)/dependencies/gcc/bin/
+endif
+
+SRCS = FSM_SimpleWriteOnExec.c.cosim
+
+EXTRA_SW_COMPILATION_FLAG += -Isimulation/sw/ 
+ifeq (,$(wildcard simulation/sw/*.c))
+	SRC_LANGUAGE := -x c++
+	SRC_LANGUAGE_NONE := -x none simulation/sw/legup_wrap.cpp
+else 
+	SRC_LANGUAGE := -x c
+	SRC_LANGUAGE_NONE := -x none simulation/sw/legup_wrap.c
+endif
+SW_OUTPUT_FILE := simulation/sw/legup_cosim 
+
+compile: sw_compile
+
+run: sw_run	

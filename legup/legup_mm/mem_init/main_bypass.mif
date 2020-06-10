@@ -1,0 +1,32 @@
+Depth = 25;
+Width = 32;
+Address_radix = dec;
+Data_radix = bin;
+Content
+Begin
+0: 0;	-- main_bypass[0] = 0
+1: 0;	-- main_bypass[1] = 0
+2: 0;	-- main_bypass[2] = 0
+3: 1;	-- main_bypass[3] = 1
+4: 1;	-- main_bypass[4] = 1
+5: 0;	-- main_bypass[5] = 0
+6: 0;	-- main_bypass[6] = 0
+7: 1;	-- main_bypass[7] = 1
+8: 0;	-- main_bypass[8] = 0
+9: 1;	-- main_bypass[9] = 1
+10: 1;	-- main_bypass[10] = 1
+11: 1;	-- main_bypass[11] = 1
+12: 1;	-- main_bypass[12] = 1
+13: 1;	-- main_bypass[13] = 1
+14: 1;	-- main_bypass[14] = 1
+15: 1;	-- main_bypass[15] = 1
+16: 1;	-- main_bypass[16] = 1
+17: 1;	-- main_bypass[17] = 1
+18: 1;	-- main_bypass[18] = 1
+19: 1;	-- main_bypass[19] = 1
+20: 1;	-- main_bypass[20] = 1
+21: 1;	-- main_bypass[21] = 1
+22: 1;	-- main_bypass[22] = 1
+23: 1;	-- main_bypass[23] = 1
+24: 0;	-- main_bypass[24] = 0
+End;

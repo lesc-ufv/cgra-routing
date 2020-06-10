@@ -1,0 +1,141 @@
+// ----------------------------------------------------------------------------
+// LegUp High-Level Synthesis Tool Version 7.5 (http://legupcomputing.com)
+// Copyright (c) 2015-2019 LegUp Computing Inc. All Rights Reserved.
+// For technical issues, please contact: support@legupcomputing.com
+// For general inquiries, please contact: info@legupcomputing.com
+// Date: Wed Jun 10 00:27:32 2020
+// ----------------------------------------------------------------------------
+
+LegUp Summary Report for Project: legup_simple2.
+
+Table of Contents
+  1. Scheduling Result
+  2. Pipeline Result
+  3. Memory Usage
+  4. Resource Binding with Adaptive Latency
+
+
+====== 1. Scheduling Result ======
+
+Please use LegUp's schedule viewer to examine the schedule.
+
+Basic Block Latencies:
+
++-------------------------------------------+
+| Function: main (non-pipelined function)   |
++---------------------------+---------------+
+| Basic Block               | Cycle Latency |
++---------------------------+---------------+
+| %entry                    | 1             |
+| %while.body.i             | 3             |
+| %while.body.i16.preheader | 1             |
+| %while.body.i16           | 3             |
+| %while.body.i10.preheader | 1             |
+| %while.body.i10           | 2             |
+| %while.body.i4.preheader  | 1             |
+| %while.body.i4            | 2             |
+| %NodeBlock29.preheader    | 1             |
+| %NodeBlock29              | 1             |
+| %NodeBlock27              | 1             |
+| %NodeBlock25              | 1             |
+| %NodeBlock23              | 1             |
+| %LeafBlock21              | 1             |
+| %NodeBlock19              | 1             |
+| %NodeBlock17              | 1             |
+| %NodeBlock15              | 1             |
+| %NodeBlock13              | 1             |
+| %NodeBlock11              | 1             |
+| %NodeBlock9               | 1             |
+| %NodeBlock7               | 1             |
+| %NodeBlock5               | 1             |
+| %NodeBlock3               | 1             |
+| %NodeBlock1               | 1             |
+| %NodeBlock                | 1             |
+| %LeafBlock                | 1             |
+| %sw.bb1                   | 1             |
+| %land.lhs.true            | 1             |
+| %if.else                  | 2             |
+| %sw.bb12                  | 1             |
+| %if.else18                | 2             |
+| %sw.bb29                  | 2             |
+| %lor.lhs.false            | 2             |
+| %sw.bb41                  | 2             |
+| %if.then47                | 3             |
+| %if.end50                 | 2             |
+| %sw.bb58                  | 2             |
+| %lor.lhs.false64          | 2             |
+| %sw.bb73                  | 2             |
+| %if.then79                | 3             |
+| %if.end83                 | 2             |
+| %sw.bb91                  | 1             |
+| %if.else98                | 2             |
+| %sw.bb109                 | 2             |
+| %lor.lhs.false115         | 2             |
+| %sw.bb124                 | 2             |
+| %if.then130               | 3             |
+| %if.end134                | 2             |
+| %sw.bb142                 | 2             |
+| %lor.lhs.false148         | 2             |
+| %sw.bb157                 | 2             |
+| %if.then163               | 3             |
+| %if.end167                | 2             |
+| %sw.bb175                 | 1             |
+| %sw.bb182                 | 1             |
+| %sw.bb187                 | 4             |
+| %if.else195               | 3             |
+| %sw.bb200                 | 1             |
+| %NewDefault               | 1             |
+| %sw.epilog                | 1             |
++---------------------------+---------------+
+
+====== 2. Pipeline Result ======
+
+No pipeline is generated.
+
+====== 3. Memory Usage ======
+
++------------------------------------------------------------------------------------------+
+| Local Memories                                                                           |
++------------------------+-----------------------+------+-------------+------------+-------+
+| Name                   | Accessing Function(s) | Type | Size [Bits] | Data Width | Depth |
++------------------------+-----------------------+------+-------------+------------+-------+
+| main_input             | main                  | ROM  | 512         | 32         | 16    |
+| main_grid              | main                  | ROM  | 512         | 8          | 64    |
+| main_bypass            | main                  | ROM  | 512         | 32         | 16    |
+| main_entry_grid        | main                  | RAM  | 512         | 8          | 64    |
+| main_entry_bypass      | main                  | RAM  | 512         | 32         | 16    |
+| main_entry_stackNode   | main                  | RAM  | 192         | 32         | 6     |
+| main_entry_stackOutput | main                  | RAM  | 192         | 32         | 6     |
++------------------------+-----------------------+------+-------------+------------+-------+
+
++-------------------------+
+| Local Constant Memories |
++-------------------------+
+| None                    |
++-------------------------+
+
++-----------------------+
+| Shared Local Memories |
++-----------------------+
+| None                  |
++-----------------------+
+
++------------------+
+| Aliased Memories |
++------------------+
+| None             |
++------------------+
+
++--------------+
+| I/O Memories |
++--------------+
+| None         |
++--------------+
+
+
+====== 4. Resource Binding with Adaptive Latency ======
+
+Binding to resource with adaptive latency is disabled.
+You can enable this feature by setting config parameter 'ADAPTIVE_LATENCY_BINDING' to 1.
+
+

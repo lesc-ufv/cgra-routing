@@ -32,7 +32,7 @@
 #define orientation_left 2
 #define orientation_right 3
 
-void main()
+int main()
 {
     // Constants
     unsigned int max_bypass = 2;
@@ -297,7 +297,7 @@ unsigned int stackOutput[8] = {0, 0, 0, 0, 0, 0, 0, 0};
             break;
         case swe_end:
             next_state = swe_end;
-            return;
+            return 1;
             break;
         
         default:
@@ -313,5 +313,6 @@ unsigned int stackOutput[8] = {0, 0, 0, 0, 0, 0, 0, 0};
         firstEdge = next_firstEdge;
         stackIndex = next_stackIndex;
     }
+return 0;
 }
 

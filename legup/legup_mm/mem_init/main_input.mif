@@ -1,0 +1,29 @@
+Depth = 22;
+Width = 32;
+Address_radix = dec;
+Data_radix = bin;
+Content
+Begin
+0: 1010;	-- main_input[0] = 10
+1: 1010;	-- main_input[1] = 10
+2: 10101;	-- main_input[2] = 21
+3: 10001;	-- main_input[3] = 17
+4: 10110;	-- main_input[4] = 22
+5: 10010;	-- main_input[5] = 18
+6: 10001;	-- main_input[6] = 17
+7: 1101;	-- main_input[7] = 13
+8: 1100;	-- main_input[8] = 12
+9: 1100;	-- main_input[9] = 12
+10: 10100;	-- main_input[10] = 20
+11: 10111;	-- main_input[11] = 23
+12: 10111;	-- main_input[12] = 23
+13: 10011;	-- main_input[13] = 19
+14: 10111;	-- main_input[14] = 23
+15: 1110;	-- main_input[15] = 14
+16: 1110;	-- main_input[16] = 14
+17: 1100;	-- main_input[17] = 12
+18: 10011;	-- main_input[18] = 19
+19: 100;	-- main_input[19] = 4
+20: 0;	-- main_input[20] = 0
+21: 0;	-- main_input[21] = 0
+End;

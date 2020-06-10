@@ -1,0 +1,23 @@
+Depth = 16;
+Width = 32;
+Address_radix = dec;
+Data_radix = bin;
+Content
+Begin
+0: 1;	-- main_bypass[0] = 1
+1: 1;	-- main_bypass[1] = 1
+2: 1;	-- main_bypass[2] = 1
+3: 1;	-- main_bypass[3] = 1
+4: 1;	-- main_bypass[4] = 1
+5: 1;	-- main_bypass[5] = 1
+6: 1;	-- main_bypass[6] = 1
+7: 0;	-- main_bypass[7] = 0
+8: 1;	-- main_bypass[8] = 1
+9: 1;	-- main_bypass[9] = 1
+10: 1;	-- main_bypass[10] = 1
+11: 1;	-- main_bypass[11] = 1
+12: 0;	-- main_bypass[12] = 0
+13: 1;	-- main_bypass[13] = 1
+14: 0;	-- main_bypass[14] = 0
+15: 1;	-- main_bypass[15] = 1
+End;

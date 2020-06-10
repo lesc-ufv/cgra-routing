@@ -1,0 +1,19 @@
+Depth = 12;
+Width = 32;
+Address_radix = dec;
+Data_radix = bin;
+Content
+Begin
+0: 101;	-- main_input[0] = 5
+1: 101;	-- main_input[1] = 5
+2: 1;	-- main_input[2] = 1
+3: 110;	-- main_input[3] = 6
+4: 11;	-- main_input[4] = 3
+5: 11;	-- main_input[5] = 3
+6: 0;	-- main_input[6] = 0
+7: 1000;	-- main_input[7] = 8
+8: 1000;	-- main_input[8] = 8
+9: 11;	-- main_input[9] = 3
+10: 0;	-- main_input[10] = 0
+11: 0;	-- main_input[11] = 0
+End;

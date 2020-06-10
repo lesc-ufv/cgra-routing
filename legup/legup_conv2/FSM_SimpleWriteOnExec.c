@@ -42,8 +42,9 @@ void main()
 unsigned int input[22] = {12, 12, 15, 10, 10, 5, 10, 7, 1, 12, 1, 6, 11, 2, 11, 3, 3, 0, 0, 12, 0, 0};
 bool grid[64] = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0};
 unsigned int bypass[16] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-unsigned int stackNode[6];
-unsigned int stackOutput[6];
+unsigned int stackNode[6] = {0, 0, 0, 0, 0, 0};
+unsigned int stackOutput[6] = {0, 0, 0, 0, 0, 0};
+
 
     // Internals
     unsigned int state;

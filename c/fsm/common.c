@@ -304,6 +304,29 @@ void CreateLegupInput(CGRA *cgra, InputEdgesVector *input)
         }
     }
 
-    printf("unsigned int stackNode[%u];\n", 2 * (floorSqrt((*cgra).gridSize) - 1));
-    printf("unsigned int stackOutput[%u];\n", 2 * (floorSqrt((*cgra).gridSize) - 1));
+    printf("unsigned int stackNode[%u] = {", 2 * (floorSqrt((*cgra).gridSize) - 1));
+    for (size_t i = 0; i < 2 * (floorSqrt((*cgra).gridSize) - 1); i++)
+    {
+        if (i != (2 * (floorSqrt((*cgra).gridSize) - 1)-1))
+        {
+            printf("0, ");
+        }
+        else
+        {
+            printf("0};\n");
+        }
+    }
+    
+    printf("unsigned int stackOutput[%u] = {", 2 * (floorSqrt((*cgra).gridSize) - 1));
+    for (size_t i = 0; i < 2 * (floorSqrt((*cgra).gridSize) - 1); i++)
+    {
+        if (i != (2 * (floorSqrt((*cgra).gridSize) - 1)-1))
+        {
+            printf("0, ");
+        }
+        else
+        {
+            printf("0};\n");
+        }
+    }
 }

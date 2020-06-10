@@ -39,11 +39,13 @@ if key_pressed == 1:
 
             for edge_list in sorted(glob.glob(bench + "/*")):
                 output_csv = bench_out_folder + edge_list.split("/")[4].split(".")[0] + ".csv"
-                print("\n" + bench)
+                print(bench)
                 os.system("./" + CBIN + " " + grid + " " + edge_list + " " + output_csv)
+
+                edges_count += 1
                 if(edges_count==INPUT_EDGES_PER_TEST):
                     break
-                edges_count += 1
+                
 elif key_pressed == 2:
     os.system(VLIB)
     os.system(VLOG)

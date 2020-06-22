@@ -1,6 +1,8 @@
 module SimpleWriteOnExec(
-    input logic clk,
-    input logic reset
+    input wire clk,
+    input wire reset,
+    input wire [7:0] edges_input,
+    output wire [5:0] cgra_exit
 );
 
     // States
@@ -32,271 +34,265 @@ module SimpleWriteOnExec(
     parameter gridline_size = 4;
 
     // Memories
-    logic [5:0] cgra [15:0];
-    logic [7:0] edges [10:0];
-    logic [5:0] stack [5:0];
-
-    logic [5:0] next_cgra [15:0];
-    logic [7:0] next_edges [10:0];
-    logic [5:0] next_stack [5:0];
+    reg [5:0] cgra [15:0];
+    reg [5:0] stack [5:0];
+    reg [7:0] edges [10:0];
 
     // Internals
-    logic [7:0] current, next_current;
-    logic [3:0] state, next_state;
-    logic [3:0] index_input, next_index_input;
-    logic [2:0] index_stack, next_index_stack;
-    logic modified, next_modified, fe, next_fe;
+    reg [7:0] current;
+    reg [3:0] state;
+    reg [3:0] index_input;
+    reg [2:0] index_stack;
+    reg modified, fe;
+
+    assign cgra_exit = cgra[0]^cgra[1]^cgra[2]^cgra[3]^cgra[4]^cgra[5]^cgra[6]^cgra[7]^cgra[8]^cgra[9]^cgra[10]^cgra[11]^cgra[12]^cgra[13]^cgra[14]^cgra[15];
 
     always_ff @(posedge clk) begin
 
         if(reset) begin
             state <= state_init;
+            edges[0] <= edges_input;
+            edges[1] <= edges_input;
+            edges[2] <= edges_input;
+            edges[3] <= edges_input;
+            edges[4] <= edges_input;
+            edges[5] <= edges_input;
+            edges[6] <= edges_input;
+            edges[7] <= edges_input;
+            edges[8] <= edges_input;
+            edges[9] <= edges_input;
+            edges[10] <= edges_input;
         end
 
         else begin
-            state <= next_state;
-            modified <= next_modified;
-            fe <= next_fe;
-            index_input <= next_index_input;
-            index_stack <= next_index_stack;
-            current <= next_current;
-            cgra <= next_cgra;
-            edges <= next_edges;
-            stack <= next_stack;
+            case(state)
+
+                state_init:
+                begin
+                    index_input <= 0;
+                end
+
+                state_nextedge:
+                begin
+                    if (cgra[index_input]==0)
+                    begin
+                        state <= state_end;
+                    end
+                    else
+                    begin
+                        current <= edges[index_input];
+                        index_input <= index_input + 1;
+                        index_stack <= 0;
+                        fe <= 1;
+                        modified <= 0;
+                        state <= state_x_test;
+                    end
+                end
+
+                state_x_test:
+                begin
+                    if ((current[7:4]%gridline_size - current[3:0]%gridline_size)==0)
+                    begin
+                        state = state_y_test;
+                    end
+                    else if ((current[7:4]%gridline_size - current[3:0]%gridline_size)>0)
+                    begin
+                        state = state_xdec_test;
+                    end
+                    else
+                    begin
+                        state = state_xinc_test;
+                    end
+                end
+
+                state_xdec_test:
+                begin
+                    if (cgra[current[7:4]][right] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
+                    begin
+                        state <= state_y_test;
+                    end
+                    else
+                    begin
+                        state <= state_xdec_set;
+                    end
+                end
+
+                state_xdec_set:
+                begin
+                    cgra[current[7:4]][right] <= 1;
+
+                    if (!fe) begin
+                        cgra[current[7:4]][5:4] <= cgra[current[7:4]][5:4] + 1;
+                    end
+
+                    current[7:4] <= current[7:4] + 1;
+                    modified <= 1;
+                    fe <= 0;
+
+                    stack[index_stack][1:0] <= right;
+                    stack[index_stack][5:2] <= current[7:4];
+                    index_stack <= index_stack + 1;
+
+                    state = state_x_test;
+                end
+
+                state_xinc_test:
+                begin
+                    if (cgra[current[7:4]][left] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
+                    begin
+                        state <= state_y_test;
+                    end
+                    else
+                    begin
+                        state <= state_xinc_set;
+                    end
+                end
+
+                state_xinc_set:
+                begin
+                    cgra[current[7:4]][left] <= 1;
+
+                    if (!fe) begin
+                        cgra[current[7:4]][5:4] <= cgra[current[7:4]][5:4] + 1;
+                    end
+
+                    current[7:4] <= current[7:4] - 1;
+                    modified <= 1;
+                    fe <= 0;
+
+                    stack[index_stack][1:0] <= left;
+                    stack[index_stack][5:2] <= current[7:4];
+                    index_stack <= index_stack + 1;
+
+                    state = state_x_test;
+                end
+
+                state_y_test:
+                begin
+                    if ((current[7:4]/gridline_size - current[3:0]/gridline_size)==0)
+                    begin
+                        state = state_xy_test;
+                    end
+                    else if ((current[7:4]/gridline_size - current[3:0]/gridline_size)>0)
+                    begin
+                        state = state_ydec_test;
+                    end
+                    else
+                    begin
+                        state = state_yinc_test;
+                    end
+                end
+
+                state_ydec_test:
+                begin
+                    if (cgra[current[7:4]][bot] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
+                    begin
+                        state <= state_xy_test;
+                    end
+                    else
+                    begin
+                        state <= state_ydec_set;
+                    end
+                end
+
+                state_ydec_set:
+                begin
+                    cgra[current[7:4]][bot] <= 1;
+
+                    if (!fe) begin
+                        cgra[current[7:4]][5:4] <= cgra[current[7:4]][5:4] + 1;
+                    end
+
+                    current[7:4] <= current[7:4] + gridline_size;
+                    modified <= 1;
+                    fe <= 0;
+
+                    stack[index_stack][1:0] <= bot;
+                    stack[index_stack][5:2] <= current[7:4];
+                    index_stack <= index_stack + 1;
+
+                    state = state_x_test;
+                end
+
+                state_yinc_test:
+                begin
+                    if (cgra[current[7:4]][bot] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
+                    begin
+                        state <= state_xy_test;
+                    end
+                    else
+                    begin
+                        state <= state_yinc_set;
+                    end
+                end
+
+                state_yinc_set:
+                begin
+                    cgra[current[7:4]][bot] <= 1;
+
+                    if (!fe) begin
+                        cgra[current[7:4]][5:4]++;
+                    end
+
+                    current[7:4] <= current[7:4] - gridline_size;
+                    modified <= 1;
+                    fe <= 0;
+
+                    stack[index_stack][1:0] <= bot;
+                    stack[index_stack][5:0] <= current[7:4];
+                    index_stack <= index_stack + 1;
+
+                    state = state_xy_test;
+                end
+
+                state_xy_test:
+                begin
+                    if (current[7:4] == current[3:0])
+                    begin
+                        state <= state_nextedge;    
+                    end
+                    else
+                    begin
+                        state <= state_modified_test;
+                    end
+                end
+
+                state_modified_test:
+                begin
+                    if (modified) begin
+                        modified <= 1;
+                        state <= state_x_test;
+                    end
+                    else
+                    begin
+                        state <= state_blacklist;
+                    end
+                end
+
+                state_blacklist:
+                begin
+                    cgra[stack[index_stack][5:2]][stack[index_stack][1:0]] <= 0;
+
+                    if (index_stack == 0)
+                    begin
+                        state <= state_nextedge;
+                    end
+                    else
+                    begin
+                        index_stack <= index_stack - 1;
+                        cgra[stack[index_stack][5:2]][5:4] <=cgra[stack[index_stack][5:2]][5:4] - 1;
+                        state <= state_blacklist;
+                    end
+                end
+
+                state_end:
+                begin
+                    state <= state_end;
+                end
+
+            endcase
         end
 
     end
 
-    always @(*) begin
-        case(state)
-
-            state_init:
-            begin
-                next_index_input <= 0;
-                next_state <= state_nextedge;
-                $readmemb("input/cgra.bin", next_cgra);
-                $readmemb("input/edges.bin", next_edges);
-            end
-
-            state_nextedge:
-            begin
-                if (cgra[index_input]==0)
-                begin
-                    next_state <= state_end;
-                end
-                else
-                begin
-                    next_current <= edges[index_input];
-                    next_index_input <= index_input + 1;
-                    next_index_stack <= 0;
-                    next_fe <= 1;
-                    next_modified <= 0;
-                    next_state <= state_x_test;
-                end
-            end
-
-            state_x_test:
-            begin
-                if ((current[7:4]%gridline_size - current[3:0]%gridline_size)==0)
-                begin
-                    next_state = state_y_test;
-                end
-                else if ((current[7:4]%gridline_size - current[3:0]%gridline_size)>0)
-                begin
-                    next_state = state_xdec_test;
-                end
-                else
-                begin
-                    next_state = state_xinc_test;
-                end
-            end
-
-            state_xdec_test:
-            begin
-                if (cgra[current[7:4]][right] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
-                begin
-                    next_state <= state_y_test;
-                end
-                else
-                begin
-                    next_state <= state_xdec_set;
-                end
-            end
-
-            state_xdec_set:
-            begin
-                next_cgra[current[7:4]][right] <= 1;
-
-                if (!fe) begin
-                    next_cgra[current[7:4]][5:4] <= cgra[current[7:4]][5:4] + 1;
-                end
-
-                next_current[7:4] <= current[7:4] + 1;
-                next_modified <= 1;
-                next_fe <= 0;
-
-                next_stack[index_stack][1:0] <= right;
-                next_stack[index_stack][5:2] <= current[7:4];
-                next_index_stack <= index_stack + 1;
-
-                next_state = state_x_test;
-            end
-
-            state_xinc_test:
-            begin
-                if (cgra[current[7:4]][left] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
-                begin
-                    next_state <= state_y_test;
-                end
-                else
-                begin
-                    next_state <= state_xinc_set;
-                end
-            end
-
-            state_xinc_set:
-            begin
-                next_cgra[current[7:4]][left] <= 1;
-
-                if (!fe) begin
-                    next_cgra[current[7:4]][5:4] <= cgra[current[7:4]][5:4] + 1;
-                end
-
-                next_current[7:4] <= current[7:4] - 1;
-                next_modified <= 1;
-                next_fe <= 0;
-
-                next_stack[index_stack][1:0] <= left;
-                next_stack[index_stack][5:2] <= current[7:4];
-                next_index_stack <= index_stack + 1;
-
-                next_state = state_x_test;
-            end
-
-            state_y_test:
-            begin
-                if ((current[7:4]/gridline_size - current[3:0]/gridline_size)==0)
-                begin
-                    next_state = state_xy_test;
-                end
-                else if ((current[7:4]/gridline_size - current[3:0]/gridline_size)>0)
-                begin
-                    next_state = state_ydec_test;
-                end
-                else
-                begin
-                    next_state = state_yinc_test;
-                end
-            end
-
-            state_ydec_test:
-            begin
-                if (cgra[current[7:4]][bot] || (cgra[current[7:4]][5:4] == max_bypass && !fe))
-                begin
-                    next_state <= state_xy_test;
-                end
-                else
-                begin
-                    next_state <= state_ydec_set;
-                end
-            end
-
-            state_ydec_set:
-            begin
-                next_cgra[current[7:4]][bot] <= 1;
-
-                if (!fe) begin
-                    next_cgra[current[7:4]][5:4] <= cgra[current[7:4]][5:4] + 1;
-                end
-
-                next_current[7:4] <= current[7:4] + gridline_size;
-                next_modified <= 1;
-                next_fe <= 0;
-
-                next_stack[index_stack][1:0] <= bot;
-                next_stack[index_stack][5:2] <= current[7:4];
-                next_index_stack <= index_stack + 1;
-
-                next_state = state_x_test;
-            end
-
-            state_yinc_test:
-            begin
-                if (cgra[current[7:4]][bot] || (next_cgra[current[7:4]][5:4] == max_bypass && !fe))
-                begin
-                    next_state <= state_xy_test;
-                end
-                else
-                begin
-                    next_state <= state_yinc_set;
-                end
-            end
-
-            state_yinc_set:
-            begin
-                next_cgra[current[7:4]][bot] <= 1;
-
-                if (!fe) begin
-                    next_cgra[current[7:4]][5:4]++;
-                end
-
-                next_current[7:4] <= current[7:4] - gridline_size;
-                next_modified <= 1;
-                next_fe <= 0;
-
-                next_stack[index_stack][1:0] <= bot;
-                next_stack[index_stack][5:0] <= current[7:4];
-                next_index_stack <= index_stack + 1;
-
-                next_state = state_xy_test;
-            end
-
-            state_xy_test:
-            begin
-                if (current[7:4] == current[3:0])
-                begin
-                    next_state <= state_nextedge;    
-                end
-                else
-                begin
-                    next_state <= state_modified_test;
-                end
-            end
-
-            state_modified_test:
-            begin
-                if (modified) begin
-                    next_modified <= 1;
-                    next_state <= state_x_test;
-                end
-                else
-                begin
-                    next_state <= state_blacklist;
-                end
-            end
-
-            state_blacklist:
-            begin
-                next_cgra[stack[index_stack][5:2]][stack[index_stack][1:0]] <= 0;
-
-                if (index_stack == 0)
-                begin
-                    next_state <= state_nextedge;
-                end
-                else
-                begin
-                    next_index_stack <= index_stack - 1;
-                    next_cgra[stack[index_stack][5:2]][5:4] <=cgra[stack[index_stack][5:2]][5:4] - 1;
-                    next_state <= state_blacklist;
-                end
-            end
-
-            state_end:
-            begin
-                next_state <= state_end;
-            end
-
-        endcase
-
-    end
 endmodule

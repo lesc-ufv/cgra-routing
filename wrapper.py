@@ -18,7 +18,8 @@ import glob
 
 print("1- Compile C and run code")
 print("2- Sinthesize verilog and run simulation")
-print("3- Summarize output")
+print("3- Summarize output CGRAME")
+print("4- Summarize output SBCCI")
 key_pressed = int(input("Select: "))
 
 if key_pressed == 1:
@@ -58,6 +59,32 @@ elif key_pressed == 3:
     names=[]
     tables=[]
     for bench in sorted(glob.glob("output/cgrame/*")):
+        names.append(bench)
+        acc=[]
+        for csv in sorted(glob.glob(bench + "/*")):
+            acc.append(pd.read_csv(csv))
+        tables.append((pd.concat(acc).mean()))
+
+    print("bench nodes edges size empty trivial nontrivial routed bl cycles usage cpu_time verilog_time")
+
+    for i in range(12):
+        print(names[i].split("/")[2], end=" ")
+        for j in range(len(tables[i])):
+            if j==0 or j==1 or j==2:
+                print(str(int(round(tables[i][j], 0))), end=" ")
+            elif j==9:
+                print(str(round(tables[i][j]*100, 2)), end="% ")
+            else:
+                print(str(round(tables[i][j],2)), end=" ")
+        print()
+elif key_pressed == 4:
+    import pandas as pd
+    import numpy as np
+    import glob
+
+    names=[]
+    tables=[]
+    for bench in sorted(glob.glob("output/sbcci/*")):
         names.append(bench)
         acc=[]
         for csv in sorted(glob.glob(bench + "/*")):
